@@ -61,7 +61,3 @@ getBDsummaryProdExpecs(sims, getsd=FALSE)
 
 \seealso{\code{\link{add.joint.mean.many}},
   \code{\link{sim.condBD}}}
-
-\source{
-  
-}

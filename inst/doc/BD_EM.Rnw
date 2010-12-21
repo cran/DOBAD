@@ -148,7 +148,7 @@ options(continue="+");
 In this Sweave vignette, we will do estimation and confidence
 intervals for the rates in the restricted-immigration BDI model.
 
-\part{Estimating Rates for Linear Birth-Death Process via EM Algorithm}
+\part{Estimating Rates for Linear Birth-Death Process via the EM Algorithm}
 
 We are demonstrating the use of the
 \begin{verb}
@@ -184,10 +184,23 @@ partially, and see how the EM does on that data.
 First, we set up the true parameters.
 <<setParams>>=
 
+## set.seed(1155)
+## initstate=4;
+## T=8;
+##nn <-  10; ## numobservs
+## L <- .5
+## mu <- .6
+## beta.immig <- 1.2;
+## dr <- 0.000001; #Need |dr| < |L-mu| always o/w get sqrt(negative). (numerical differ'n)
+## n.fft <- 1024;
+## trueParams <- c(L,mu);
+## names(trueParams) <- c("lambda", "mu")
+
 set.seed(1155)
 initstate=4;
-T=8;
-L <- .5
+T=4;
+nn <-  10; ## numobservs
+L <- .55
 mu <- .6
 beta.immig <- 1.2;
 dr <- 0.000001; #Need |dr| < |L-mu| always o/w get sqrt(negative). (numerical differ'n)
@@ -207,7 +220,7 @@ names(fullSummary) <- c("Nplus", "Nminus", "Holdtime");
 MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig); 
 #MLEs
 ###MLE.FullyObserved are NOT the MLE for the EM, but hopefully close as delta-of-observation --> 0
-partialData <- getPartialData( sort(runif(10,0,T)), dat);
+partialData <- getPartialData( sort(runif(nn,0,T)), dat);
 observedSummary <- BDsummaryStats.PO(partialData); observedSummary;
 @ Note that the difference between \verb@fullSummary@ and
 \verb@observedSummary@ is some measure of the information we're
@@ -225,25 +238,28 @@ vignette to finish relatively quickly.  (If the estimates are not
 close to the MLE, when we try to compute the confidence interval we
 can try to take a square root of a negative.)
 
-You may (and perhaps should) modify the number of iterations to see
+You may (and should!) modify the number of iterations to see
 the EM actually at work.
 
 
 <<runEM>>=
 #########RUN EM
 
-iters <- 2;
+iters <- 1;
 tol <- .001;
-initParamMat <- getInitParams(numInitParams=1, summary.PO=observedSummary, 
-                                      T=T, beta.immig=beta.immig,
-                                      diffScale=100*dr);
 
-EMtime <- system.time(estimators.hist <-
-                      EM.BD.SC(initParamMat=initParamMat, M=iters, beta.immig=beta.immig,
-                               dat=partialData, dr=dr, n.fft=n.fft, tol=tol)
-                      )[3];
+#### You should uncomment the following 2 commands and run -- commented for speed, for now.
+## initParamMat <- getInitParams(numInitParams=1, summary.PO=observedSummary, 
+##                                       T=T, beta.immig=beta.immig,
+##                                       diffScale=100*dr);
 
+## EMtime <- system.time(estimators.hist <-
+##                       EM.BD.SC(initParamMat=initParamMat, M=iters, beta.immig=beta.immig,
+##                                dat=partialData, dr=dr, n.fft=n.fft, tol=tol)
+##                       )[3];
+## EMtime;
 
+#### Generic optimization.
 ## logLike <- function(rates){
 ##   BDloglikelihood.PO(partialDat=partialData, L=exp(rates[1]), m=exp(rates[2]),
 ##                      nu=beta.immig*exp(rates[1]), n.fft=1024);
@@ -257,6 +273,7 @@ EMtime <- system.time(estimators.hist <-
 
 
 ##Optimal appears to be: c(.4077229, .8642744)
+## Run starting from the optimal to get the right values setup for the CIs:
 initParamMat <- matrix(c(.41,.86),nrow=1);
 names(initParamMat) <- c("lambdahat","muhat")
 iters <- 1;
@@ -264,8 +281,8 @@ EMtime <- system.time(estimators.hist <-
                       EM.BD.SC(initParamMat=initParamMat, M=iters, beta.immig=beta.immig,
                                dat=partialData, dr=dr, n.fft=n.fft, tol=tol)
                       )[3];
-
 EMtime;
+
 estimators.hist
 Lhat <- estimators.hist[iters+1,1]; Lhat
 Mhat <- estimators.hist[iters+1,2]; Mhat

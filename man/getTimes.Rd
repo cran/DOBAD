@@ -13,7 +13,7 @@
 getTimes(object)
 }
 \arguments{
-  \item{object}{ A CTMC or generalization.  has a list of jump times.
+  \item{object}{ A CTMC.  has a list of jump times.
 }
 }
 \details{

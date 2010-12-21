@@ -26,11 +26,9 @@ serves that purpose.
     \item{getTimes}{\code{signature(object = "CTMC_PO_1")}: ... }
 	 }
 }
-\references{}
+
 \author{Charles Doss}
-\note{}
-\seealso{
-}
+
 \examples{
 showClass("CTMC_PO_1")
 }

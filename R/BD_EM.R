@@ -1050,9 +1050,7 @@ solveNuHat <- function(nisU, myCounts,T, nuGuess, NRtol){
     res
   }
   lognuHat <- nlm(f=nlmArg,p=log(nuGuess) ,iterlim=100, gradtol=NRtol,
-                  stepmax=.5)$estimate
-  ##lognuHat <- nlm(f=nlmArg,p=log(nuGuess) ,iterlim=100, gradtol=NRtol,
-  ##                stepmax=2.5)$estimate
+                  stepmax=.5)$estimate #### HERE HERE HERE ".5" needs to be modified 
   nuHat <- exp(lognuHat)
   if (nuHat > myCounts["Nplus"]/T)  nuHat <- myCounts["Nplus"]/T
   ##else if (nuHat<0) nuHat <- 0

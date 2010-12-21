@@ -91,6 +91,3 @@ verbose=1, verbFile=NULL)
 
 \seealso{\code{\link{add.cond.mean.many}}}
 
-\source{
-
-}

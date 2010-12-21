@@ -67,5 +67,3 @@ verbose=1, verbFile=NULL, simMethod=-1,...)
 
 \seealso{\code{\link{add.joint.mean.many}}}
 
-\source{
-}

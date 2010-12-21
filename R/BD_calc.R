@@ -1,4 +1,6 @@
-#
+##BD_calc.R: generating function for BDI model (so, "BD_calc" would be better as
+##  "BDI_calc").
+
 # Generating function: Joint birth counts (r) and ending state (s)
 #
 # lambda - birth rate

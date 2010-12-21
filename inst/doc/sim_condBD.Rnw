@@ -182,10 +182,10 @@ obsData;
 @ 
 Now, we do a conditional simulation:
 <<condSim>>=
-nsims <- 5;
+nsims <- 2;
 condSims <- sim.condBD(N=nsims, bd.PO=obsData, L=L, m=m, nu=nu);
 condSims[1]
-condSims[4]
+condSims[2]
 @ 
 <<conclusion, echo=FALSE>>=
 options(continue=" "); ##undo what we set at top

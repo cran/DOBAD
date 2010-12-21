@@ -234,8 +234,5 @@ timeave.cond.mean.many(t=my.time,lambda=my.lambda,mu=my.mu,nu=my.nu,X0=my.start,
 
 \seealso{\code{\link{add.generator}}}
 
-\source{
-
-}
 
 \keyword{math}

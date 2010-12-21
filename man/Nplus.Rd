@@ -28,8 +28,7 @@ Nplus.CTMC_PO_many(ctmcpomany)
    \item{ctmcpomany}{A CTMC_PO_many.
    }
  }
- \details{
- }
+
  \value{
    Returns an integer, the number of jumps up.
  }

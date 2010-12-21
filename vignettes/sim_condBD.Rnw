@@ -126,7 +126,6 @@
 \author{Charles Doss}
 \date{September 2009}
 
-\usepackage{Sweave}
 \begin{document}
 
 
@@ -138,6 +137,9 @@
 
 \vspace{-3.7mm} %
 
+<<preamble,echo=FALSE>>=
+options(continue="+");
+@ 
 
 
 
@@ -160,102 +162,34 @@ vector of the times $t_i$, $i= 0, \ldots, n$ and a vector of states at
 each of those times, $s_i$, for $i=0, \ldots, n$ (where $X(t_i) =
 s_i$.
 
-\begin{Schunk}
-\begin{Sinput}
-> library(DOBAD)
-\end{Sinput}
-\end{Schunk}
+<<sourceCode>>=
+library(DOBAD)
+@ 
 
 Generate a chain, the ``truth'' that we would not observe in practice:
-\begin{Schunk}
-\begin{Sinput}
-> L <- 0.3
-> m <- 0.5
-> nu <- 0.4
-> set.seed(112)
-> unobservedChain <- birth.death.simulant(t = 5, X0 = 11, lambda = 0.3, 
-+    mu = 0.5, nu = 0.4)
-> unobservedChain
-\end{Sinput}
-\begin{Soutput}
-An object of class "BDMC"
-Slot "states":
- [1] 11 12 11 10  9 10 11 10 11 10  9 10  9 10  9 10  9  8  7  8  9 10  9  8  7
-[26]  8  9  8  7  6  5  6  7  8  7  8  7  8  7  8  7  6  5  4
-
-Slot "times":
- [1] 0.0000000 0.1304171 0.1378384 0.1874095 0.3413327 0.4836734 0.5151733
- [8] 0.5570117 0.7665553 0.9320789 1.0212908 1.1413929 1.1998740 1.2975232
-[15] 1.3406924 1.3665537 1.3994869 1.6049192 1.6333970 1.7129540 1.7668332
-[22] 1.8285686 1.8363130 1.9739581 1.9851389 2.0814101 2.0854210 2.3046697
-[29] 2.4094295 2.5627537 2.6068091 3.1822596 3.3482861 3.3844540 3.4134403
-[36] 3.4503969 3.4519932 3.9011731 4.1374942 4.2672352 4.3789622 4.5547798
-[43] 4.6734574 4.7213272
-
-Slot "T":
-[1] 5
-\end{Soutput}
-\end{Schunk}
+<<>>=
+L <- .3; m <- .5; 
+nu <- .4
+set.seed(112)
+unobservedChain <- birth.death.simulant(t=5, X0=11, lambda=.3, mu=.5, nu=.4);
+unobservedChain;
+@ 
 Then fix some ``observation times'' and ``observe'' the chain:
-\begin{Schunk}
-\begin{Sinput}
-> times <- c(0, 0.21, 0.62, 0.73, 1.44, 1.95, 3.56, 4.17)
-> obsData <- getPartialData(times, unobservedChain)
-> obsData
-\end{Sinput}
-\begin{Soutput}
-An object of class "CTMC_PO_1"
-Slot "states":
-[1] 11 10 10 10  9  9  7  7
-
-Slot "times":
-[1] 0.00 0.21 0.62 0.73 1.44 1.95 3.56 4.17
-\end{Soutput}
-\end{Schunk}
+<<>>=
+times <- c(0, .21,.62,.73, 1.44, 1.95, 3.56, 4.17);
+obsData <- getPartialData(times,  unobservedChain);
+obsData;
+@ 
 Now, we do a conditional simulation:
-\begin{Schunk}
-\begin{Sinput}
-> nsims <- 5
-> condSims <- sim.condBD(N = nsims, bd.PO = obsData, L = L, m = m, 
-+    nu = nu)
-> condSims[1]
-\end{Sinput}
-\begin{Soutput}
-[[1]]
-An object of class "BDMC"
-Slot "states":
- [1] 11 10  9 10 11 10 11 10  9 10  9 10  9  8  7  8  9  8  7  6  7
-
-Slot "times":
- [1] 0.00000000 0.05224893 0.44767799 0.57874166 0.76491147 0.86669301
- [7] 0.99362847 1.17552882 1.41615881 1.64403070 1.68311572 1.75535090
-[13] 1.91845847 2.06208393 2.10971694 2.29007387 2.31764070 2.59837720
-[19] 2.70438486 3.88598190 4.08667118
-
-Slot "T":
-[1] 4.17
-\end{Soutput}
-\begin{Sinput}
-> condSims[4]
-\end{Sinput}
-\begin{Soutput}
-[[1]]
-An object of class "BDMC"
-Slot "states":
- [1] 11 10  9 10 11 10  9  8  9 10 11 10 11 10  9  8  7  8  7  6  7  8  7  8  7
-[26]  8  7  8  7
-
-Slot "times":
- [1] 0.00000000 0.02210702 0.44783042 0.46187799 0.64255612 0.69685008
- [7] 0.77231358 0.85598923 1.42694811 1.44175639 1.46869934 1.63690122
-[13] 1.66096808 1.77043653 1.80831279 2.17136625 2.45274890 2.55077418
-[19] 2.59310847 2.60258622 2.71888487 2.74860598 2.96281893 2.98744978
-[25] 3.08537681 3.70667131 3.89807045 4.01906935 4.09732896
-
-Slot "T":
-[1] 4.17
-\end{Soutput}
-\end{Schunk}
+<<condSim>>=
+nsims <- 2;
+condSims <- sim.condBD(N=nsims, bd.PO=obsData, L=L, m=m, nu=nu);
+condSims[1]
+condSims[2]
+@ 
+<<conclusion, echo=FALSE>>=
+options(continue=" "); ##undo what we set at top
+@ 
 
 \bibliographystyle{biom} %
 \bibliography{DOBADbiblio}

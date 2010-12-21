@@ -93,6 +93,14 @@ setClass(Class="BDMC_many", contains=c("CTMC_many"),
 
 
 
+if (!isGeneric("getBDMCsPOlist")) {
+  if (is.function("getBDMCsPOlist"))
+    fun <- getBDMCsPOlist
+  else fun <- function(object) standardGeneric("getBDMCsPOlist")
+  setGeneric("getBDMCsPOlist", fun)
+}
+
+
 
 if (!isGeneric("getStates")) {
   if (is.function("getStates"))
@@ -128,7 +136,7 @@ setMethod("getTimes", "CTMC_PO_1", function(object) {object@times});
 
 setMethod("getT", "CTMC", function(object) {object@T});
 setMethod("getT", "BDMC", function(object) {object@T});
-setMethod("getT", "CTMC_PO_1", function(object) {n <- length(object@times); object@times[n]-object@times[1];});
+setMethod("getT", "CTMC_PO_1", function(object) {n <- length(object@times); object@times[n]-object@times[1];}); ## use tail(,1)
 setMethod("getT", "CTMC_PO_many", function(object) {Ts <- sapply(object@BDMCsPO, getT);  sum(Ts); });
 setMethod("getT", "CTMC_many", function(object) {Ts <- sapply(object@CTMCs, getT);  sum(Ts); });
 setMethod("getT", "BDMC_many", function(object) {Ts <- sapply(object@CTMCs, getT);  sum(Ts); });
@@ -145,6 +153,10 @@ setMethod("[", "CTMC_many", function(x,i,j="missing",...,drop=TRUE){
 setMethod("[[", "CTMC_many", function(x,i,j="missing",...,drop=TRUE){
   x@CTMCs[[i,...,drop=drop]];
 })
+
+##accessor
+setMethod("getBDMCsPOlist", "CTMC_PO_many", function(object){object@BDMCsPO})
+
 
 ###Methods for converting from back and forth between lists and classes
 CTMC2list <- function(aCTMC){

@@ -48,7 +48,6 @@ getBDinform.PO(partialData,Lhat,Mhat, beta.immig,delta=.001,
   second corresponds to mu}
 \author{Charles Doss}
 
-\seealso{}
 
 \source{
   Louis, T A. (1982). Finding the observed information matrix when using the EM

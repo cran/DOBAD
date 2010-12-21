@@ -79,9 +79,9 @@ E.step.SC(theData, oldParams, beta.immig,  dr=0.001, n.fft=1024,
   birth-death process.
 }
 
-\value{
-  M.step.SC returns a vector with names "lambdahat" and "muhat" which
-  are the respective maximizers of the likelihood.
+\value{ M.step.SC returns a length 2 vector with first element
+  lambda-hat and second element mu-hat, the respective maximizers of the
+  likelihood.
   
   E.step.SC returns a vector with names "Nplus", "Nminus", and
   "Holdtime."
@@ -92,5 +92,3 @@ E.step.SC(theData, oldParams, beta.immig,  dr=0.001, n.fft=1024,
 
 \seealso{\code{\link{EM.BD.SC}}}
 
-\source{
-}

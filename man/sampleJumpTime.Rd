@@ -89,26 +89,12 @@ f.i(t, T, a, b, up, L, m, nu, n.fft = 1024)
 \value{
   A time (real number) between 0 and T.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
+
 \author{
 Charles Doss
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
  \code{\link{p.i}}
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
-\examples{
-
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ }
-\keyword{ }% __ONLY ONE__ keyword per line

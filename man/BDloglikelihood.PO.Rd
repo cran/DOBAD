@@ -46,21 +46,10 @@ BDloglikelihood.PO(partialDat, L, m, nu, n.fft = 1024)
 \value{
   Real number.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
 \author{
 charles doss
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 library(DOBAD)
 T=25;
@@ -77,7 +66,3 @@ partialData <- getPartialData( seq(0,T,delta), dat);
 #calculate the likelihood
 BDloglikelihood.PO(partialDat=partialData, L=L, m=mu, nu=beta.immig*L);
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ }
-\keyword{ }% __ONLY ONE__ keyword per line

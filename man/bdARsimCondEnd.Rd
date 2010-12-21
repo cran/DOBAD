@@ -61,25 +61,13 @@ bdARsimCondEnd.1(Naccepted = NULL, Ntotal = NULL, Nmax=NULL, T = 1.02, L = 0.3, 
 \value{
   List of BDMC objects.
 }
-\references{
-}
+
 \author{
 Charles Doss
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 bdARsimCondEnd.1(Naccepted=10);  #default parameters; simulates at least10.
 bdARsimCondEnd.1(Ntotal=10);  #default parameters; maybe end with none.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{  }
-\keyword{ }% __ONLY ONE__ keyword per line

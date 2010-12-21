@@ -24,9 +24,9 @@ Objects can be created by calls of the form \code{new("CTMC", ...)}.
     \item{getTimes}{\code{signature(object = "CTMC")}: ... }
   }
 }
-\references{ }
+
 \author{Charles Doss }
-\note{  }
+
 
 \seealso{
   \link{getT,CTMC-method}

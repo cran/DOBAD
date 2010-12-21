@@ -36,8 +36,8 @@ timeave.laplace = function(r,s,t,lambda,mu,nu,X0) {
   H1 = ((x2 - x1) / ( (ratio.term*exp.term - 1)*(s-x2) ))^(nu/lambda) * exp(-nu*(1-x1)*t)
   val <- (H0)^(X0) * H1
 }
-                                        #Note: H could be used in add,rem,timeave.generators but was added later.
-                                        # not sure what diff b/t a1,a2 and exparg1,exparg2 is.  room for 'r' term?
+##Note: H could be used in add,rem,timeave.generators but was added later.
+## not sure what diff b/t a1,a2 and exparg1,exparg2 is.  room for 'r' term?
 H <- function( a1, a2, exparg1, exparg2, r, s, t, i, L, nu){
   expterm <- exp(L*(exparg1-exparg2)*r*t);
   nume1 <- a1 - a2* expterm *(s-a1)/(s-a2);

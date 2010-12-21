@@ -24,12 +24,8 @@ simplify(simpleList)
 \value{
   numeric vector whose length is the number of components of simpleList.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
+
+
 \note{
   The base R unlist function probably makes this redundant.
 }
@@ -39,10 +35,3 @@ simplify(simpleList)
 \seealso{
   unlist
 }
-\examples{
-
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ }
-\keyword{ }% __ONLY ONE__ keyword per line

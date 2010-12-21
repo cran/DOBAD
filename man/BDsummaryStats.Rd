@@ -95,6 +95,3 @@ waitTimes(stateHist, timeHist, T)
 
 \seealso{\link{BDMC-class}}
 
-\source{
-
-}

@@ -88,8 +88,6 @@ getBDinform.PO.manual(ENplus, ENminus, EHoldtime,
   second corresponds to mu}
 \author{Charles Doss}
 
-\seealso{}
-
 \source{
   Louis, T A. (1982). Finding the observed information matrix when using the EM
   algorithm. \emph{J. Roy. Statist. Soc. Ser. B}. 44 226-233.

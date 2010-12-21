@@ -21,11 +21,7 @@ together.
 \section{Methods}{
 No methods defined with class "CTMC_PO_many" in the signature.
 }
-\references{}
-\author{  }
-\note{}
-\seealso{
-}
+
 \examples{
 showClass("CTMC_PO_many")
 }

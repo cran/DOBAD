@@ -11,7 +11,6 @@ EM.BD.SC.1 <- function(dat, init.params, tol=0.001, M=30, beta.immig,
                        verbose=1, verbFile=NULL) {
   if (!is.null(verbFile)) sink(verbFile)
   eps <- c(1/0,1/0); #epsilon
-  names(init.params) <- c("lambdahat", "muhat")
   estimators <- init.params;
   estimators.hist <- matrix(nrow=M+1, ncol=2);
   estimators.hist[1,] <- init.params;
@@ -22,7 +21,7 @@ EM.BD.SC.1 <- function(dat, init.params, tol=0.001, M=30, beta.immig,
                                   dr=dr, n.fft=n.fft, r=r,prec.tol, prec.fail.stop);
     estimators.hist[i+1,] <- estimators;
     if (verbose>0){
-      print( paste("The", i, "just finished and the new estimators are"));
+      print( paste("Iteration", i, "just finished and the new estimators are"));
       print(estimators);    
     }
     estimators.hist[M+1,] <- estimators; #for ease of access if tolerance kicks in
@@ -42,9 +41,10 @@ getNewParams.SC <- function(theData, oldParams, beta.immig,  dr=0.001,r=4,
 E.step.SC.CTMC_PO_many <- function(theData, oldParams, beta.immig,  dr=0.001,
                                    n.fft=1024, r=4, prec.tol, prec.fail.stop){
   n.Procs <- length(theData@BDMCsPO); ##badform to directly reference.
-  ##resultMatrix <- matrix(nrow=n.Procs, ncol=3); ##gets overwritten by sapply
-  resultMatrix <- sapply(theData@BDMCsPO,
-                         function(po1){E.step.SC.CTMC_PO_1(po1,oldParams,beta.immig,dr,n.fft,r=r,
+  ##resultMatrix <- sapply(theData@BDMCsPO,
+  resultMatrix <- sapply(getBDMCsPOlist(theData), ## this has been modified and not tested
+                         function(po1){E.step.SC.CTMC_PO_1(po1,oldParams,beta.immig,
+                                                           dr,n.fft,r=r,
                                                            prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)})
   apply(resultMatrix, 1, sum);
 }
@@ -52,12 +52,8 @@ E.step.SC.CTMC_PO_many <- function(theData, oldParams, beta.immig,  dr=0.001,
 E.step.SC.CTMC_PO_1<- function(theData, oldParams, beta.immig,  dr=0.001,
                                n.fft=1024, r=4, prec.tol, prec.fail.stop){
   vec <- c(0,0,0);
-  if ( !identical(names(oldParams), c("lambdahat", "muhat")) ){
-    print("Didn't name parameters correctly.");
-    print( names(oldParams) );
-  }
-  L <- oldParams["lambdahat"];
-  mu <- oldParams["muhat"];
+  L <- oldParams[1];
+  mu <- oldParams[2];
   nu <- beta.immig*L;
   N <- length(getStates(theData));
   for (i in 1:(N-1)){
@@ -90,12 +86,8 @@ E.step.SC.CTMC_PO_1<- function(theData, oldParams, beta.immig,  dr=0.001,
 E.step.SC.list <- function(theData, oldParams, beta.immig,  dr=0.001,
                            n.fft=1024,r=4, prec.tol, prec.fail.stop){
   vec <- c(0,0,0);
-  if ( !identical(names(oldParams), c("lambdahat", "muhat")) ){
-    print("Didn't name parameters correctly.");
-    print( names(oldParams) );
-  }
-  L <- oldParams["lambdahat"];
-  mu <- oldParams["muhat"];
+  L <- oldParams[1];
+  mu <- oldParams[2];
   nu <- beta.immig*L;
   N <- length(theData$states);
   for (i in 1:(N-1)){
@@ -193,12 +185,12 @@ getInitParams <-   function(numInitParams=1, summary.PO, T, beta.immig, diffScal
   natParams <- M.step.SC(summary.PO, T=T, beta.immig=beta.immig); #"natural"
   names(natParams) <- c("lambdahat", "muhat");
   if (natParams[1] == natParams[2]) {
-    natParams["muhat"] <- natParams["muhat"] + diffScale
-    natParams["lambdahat"] <- natParams["lambdahat"] - diffScale
-  } else if (natParams["muhat"] == 0){
-    natParams["muhat"] <- .01;
-  } else if (natParams["lambdahat"] == 0){
-    natParams["lambdahat"] = natParams["muhat"] / 2 # do lambda second so its smaller.
+    natParams[2] <- natParams[2] + diffScale
+    natParams[1] <- natParams[1] - diffScale
+  } else if (natParams[2] == 0){
+    natParams[2] <- .01;
+  } else if (natParams[1] == 0){
+    natParams[1] = natParams[2] / 2 # do lambda second so its smaller.
   }
   scaleUp <- 3;
   scaleDown <- 1/4

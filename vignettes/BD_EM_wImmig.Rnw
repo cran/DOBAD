@@ -127,7 +127,6 @@ EM Algorithm on a Partially Observed Linear Birth-Death-Immigration Process}
 \author{Charles Doss}
 \date{2009}
 
-\usepackage{Sweave}
 \begin{document}
 
 
@@ -139,6 +138,10 @@ EM Algorithm on a Partially Observed Linear Birth-Death-Immigration Process}
 
 \vspace{-3.7mm} 
 
+<<preamble,echo=FALSE>>=
+options(continue="+");
+##options(warn=2); # warnings become errors
+@ 
 
 
 
@@ -182,53 +185,45 @@ complicated to calculate.  Thus the algorithm is a Monte Carlo EM
 We will set up the true parameters and a true chain, and then ``observe'' it
 partially, and see how the EM does on that data.
 First, set up the true parameters.
-\begin{Schunk}
-\begin{Sinput}
-> library(DOBAD)
-> set.seed(1156)
-> initstate = 4
-> T = 25
-> L <- 0.3
-> mu <- 0.6
-> beta.immig <- 1.2
-> dr <- 1e-06
-> n.fft <- 1024
-> trueParams <- c(L, mu)
-> names(trueParams) <- c("lambda", "mu")
-\end{Sinput}
-\end{Schunk}
+<<setParams>>=
+library(DOBAD)
+set.seed(1156);
+initstate=4;
+T=25;
+L <- .3
+mu <- .6
+beta.immig <- 1.2;
+dr <- 0.000001; #Need |dr| < |L-mu| always o/w get sqrt(negative). (numerical differ'n)
+n.fft <- 1024;
+trueParams <- c(L,mu);
+names(trueParams) <- c("lambda", "mu")
+
+@ 
 Now we get the ``truth'' and then observe the ``data''
 as well as calculate some information about both.
-\begin{Schunk}
-\begin{Sinput}
-> dat <- birth.death.simulant(t = T, lambda = L, m = mu, nu = L * 
-+    beta.immig, X0 = initstate)
-> fullSummary <- BDsummaryStats(dat)
-> fullSummary
-\end{Sinput}
-\begin{Soutput}
-   Nplus   Nminus Holdtime 
-19.00000 23.00000 49.45406 
-\end{Soutput}
-\begin{Sinput}
-> names(fullSummary) <- c("Nplus", "Nminus", "Holdtime")
-> MLEs.FullyObserved <- M.step.SC(EMsuffStats = fullSummary, T = T, 
-+    beta.immig = beta.immig)
-> observetimes <- sort(runif(20, min = 0, max = T))
-> partialData <- getPartialData(observetimes, dat)
-> T <- getTimes(partialData)[length(getTimes(partialData))]
-> observedSummary <- BDsummaryStats.PO(partialData)
-> observedSummary
-\end{Sinput}
-\begin{Soutput}
-   Nplus   Nminus Holdtime 
- 7.00000 10.00000 48.45867 
-\end{Soutput}
-\begin{Sinput}
-> param0 <- c(0.8, 0.9, 1.1)
-> names(param0) <- c("lambdahat", "muhat", "nuhat")
-\end{Sinput}
-\end{Schunk}
+<<>>=
+
+##Get the "data"
+dat <- birth.death.simulant(t=T, lambda=L, m=mu, nu=L*beta.immig, X0=initstate);
+fullSummary <- BDsummaryStats(dat); 
+fullSummary
+names(fullSummary) <- c("Nplus", "Nminus", "Holdtime");
+MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig); 
+#MLEs
+###MLE.FullyObserved are NOT the MLE for the EM, but hopefully close as delta --> 0
+
+#delta <- 2
+#observetimes <- seq(0,T,delta)
+observetimes <- sort(runif(20,min=0,max=T))
+partialData <- getPartialData( observetimes, dat);
+T <- getTimes(partialData)[length(getTimes(partialData))]
+
+observedSummary <- BDsummaryStats.PO(partialData); observedSummary;
+
+param0 <- c(.8,.9,1.1); names(param0) <- c("lambdahat", "muhat", "nuhat");
+#param0
+
+@ 
 
 
 Note that the difference between \verb@fullSummary@ and
@@ -257,36 +252,46 @@ choice was made due to its slowness at this time.
 
 % @
 
-\begin{Schunk}
-\begin{Sinput}
-> iters <- 1
-> tol <- 5e-07
-> myInitParamMat <- rbind(c(0.25, 0.26, 0.15))
-> emOuts <- DOBAD:::EM.BD(dat = partialData, init.params.mat = myInitParamMat, 
-+    tol = tol, M = iters, dr = 1e-07, n.fft = 1024, alpha = 0.2, 
-+    beta = 0.3, fracSimIncr = 3, numMCs.i.start = 20, outputBestHist = FALSE)
-\end{Sinput}
-\begin{Soutput}
-lambdahat     muhat     nuhat 
-     0.25      0.26      0.15 
-[1] "The estimators at step 1 are"
-lambdahat     muhat     nuhat 
-     0.25      0.26      0.15 
-[1] "numMCs for next time is  20"
-\end{Soutput}
-\begin{Sinput}
-> bestparams <- sapply(emOuts, function(emOut) {
-+    emOut[[iters + 1]]$newParams
-+})
-> print(bestparams)
-\end{Sinput}
-\begin{Soutput}
-                  V1
-lambdahat 0.08261488
-muhat     0.37407910
-nuhat     0.44190461
-\end{Soutput}
-\end{Schunk}
+<<runEM>>=
+
+## ##############################################################################
+## ##########################Do Generic Optimization
+## logLike <- function(rates){
+##   BDloglikelihood.PO(partialDat=partialData, L=exp(rates[1]), m=exp(rates[2]),
+##                      nu=exp(rates[3]), n.fft=1024);
+## }
+## genericEstimates <- optim(param0, logLike, 
+##                           ##method="L-BFGS-B",
+##                           ##lower=c(0.0001, 0.0001, .0001), upper=c(100,100,100),
+##                           control=list(fnscale=-1))
+## print(genericEstimates <- exp(genericEstimates$par))
+## print(logLike(log(genericEstimates)))
+## ##############################################################################
+## ##########################End Generic Optimization
+
+#########RUN EM
+iters <- 1
+tol <- .0000005;
+##myInitParamMat <- rbind(c(0, 1.46,.65),
+##                        c(.43, .4, 1.3));
+myInitParamMat <- rbind(c(.25,.26,.15));
+emOuts <- DOBAD:::EM.BD(dat=partialData, init.params.mat=myInitParamMat, tol=tol, M=iters, 
+                        dr=1e-07, n.fft=1024,
+                        alpha=.2, beta=.3, fracSimIncr=3, numMCs.i.start=20,
+                        outputBestHist=FALSE)
+
+bestparams <- sapply(emOuts, function(emOut){ emOut[[iters+1]]$newParams});
+print(bestparams)
+#loglikes <- apply( as.matrix(bestparams),2, function(param){logLike(param)});
+#print(loglikes);
+########### end Run EM
+
+
+##save.image("BD_EM_wImmigRnw.rsav");
+@
+<<conclusion,echo=FALSE>>=
+options(continue=" ");
+@ 
 
 \bibliographystyle{biom} %
 \bibliography{DOBADbiblio}

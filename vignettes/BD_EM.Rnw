@@ -126,7 +126,6 @@ EM Algorithm on a Partially Observed Linear Birth-Death Process}
 \author{Charles Doss}
 \date{June 2010}
 
-\usepackage{Sweave}
 \begin{document}
 
 
@@ -138,6 +137,10 @@ EM Algorithm on a Partially Observed Linear Birth-Death Process}
 
 \vspace{-3.7mm} 
 
+<<preamble,echo=FALSE>>=
+options(continue="+");
+##options(warn=2); # warnings become errors
+@ 
 
 
 
@@ -145,7 +148,7 @@ EM Algorithm on a Partially Observed Linear Birth-Death Process}
 In this Sweave vignette, we will do estimation and confidence
 intervals for the rates in the restricted-immigration BDI model.
 
-\part{Estimating Rates for Linear Birth-Death Process via EM Algorithm}
+\part{Estimating Rates for Linear Birth-Death Process via the EM Algorithm}
 
 We are demonstrating the use of the
 \begin{verb}
@@ -173,54 +176,53 @@ total holding time in the interval $[0,T]$ (i.e.  $R_T =
 $i$ in the interval $[0,T]$).  We do this via the generating functions.
 
 
-\begin{Schunk}
-\begin{Sinput}
-> library(DOBAD)
-\end{Sinput}
-\end{Schunk}
+<<sourceCode>>=
+library(DOBAD)
+@ 
 We will set up the true parameters and a true chain, and then ``observe'' it
 partially, and see how the EM does on that data.
 First, we set up the true parameters.
-\begin{Schunk}
-\begin{Sinput}
-> set.seed(1155)
-> initstate = 4
-> T = 8
-> L <- 0.5
-> mu <- 0.6
-> beta.immig <- 1.2
-> dr <- 1e-06
-> n.fft <- 1024
-> trueParams <- c(L, mu)
-> names(trueParams) <- c("lambda", "mu")
-\end{Sinput}
-\end{Schunk}
+<<setParams>>=
+
+## set.seed(1155)
+## initstate=4;
+## T=8;
+##nn <-  10; ## numobservs
+## L <- .5
+## mu <- .6
+## beta.immig <- 1.2;
+## dr <- 0.000001; #Need |dr| < |L-mu| always o/w get sqrt(negative). (numerical differ'n)
+## n.fft <- 1024;
+## trueParams <- c(L,mu);
+## names(trueParams) <- c("lambda", "mu")
+
+set.seed(1155)
+initstate=4;
+T=4;
+nn <-  10; ## numobservs
+L <- .55
+mu <- .6
+beta.immig <- 1.2;
+dr <- 0.000001; #Need |dr| < |L-mu| always o/w get sqrt(negative). (numerical differ'n)
+n.fft <- 1024;
+trueParams <- c(L,mu);
+names(trueParams) <- c("lambda", "mu")
+
+@ 
 Now we get the ``truth'' and then observe the ``data''
 as well as calculate some information about both.
-\begin{Schunk}
-\begin{Sinput}
-> dat <- birth.death.simulant(t = T, lambda = L, m = mu, nu = L * 
-+    beta.immig, X0 = initstate)
-> fullSummary <- BDsummaryStats(dat)
-> fullSummary
-\end{Sinput}
-\begin{Soutput}
-   Nplus   Nminus Holdtime 
- 7.00000  8.00000  7.79114 
-\end{Soutput}
-\begin{Sinput}
-> names(fullSummary) <- c("Nplus", "Nminus", "Holdtime")
-> MLEs.FullyObserved <- M.step.SC(EMsuffStats = fullSummary, T = T, 
-+    beta.immig = beta.immig)
-> partialData <- getPartialData(sort(runif(10, 0, T)), dat)
-> observedSummary <- BDsummaryStats.PO(partialData)
-> observedSummary
-\end{Sinput}
-\begin{Soutput}
-   Nplus   Nminus Holdtime 
-3.000000 2.000000 3.960782 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+##Get the "data"
+dat <- birth.death.simulant(t=T, lambda=L, m=mu, nu=L*beta.immig, X0=initstate);
+fullSummary <- BDsummaryStats(dat); 
+fullSummary
+names(fullSummary) <- c("Nplus", "Nminus", "Holdtime");
+MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig); 
+#MLEs
+###MLE.FullyObserved are NOT the MLE for the EM, but hopefully close as delta-of-observation --> 0
+partialData <- getPartialData( sort(runif(nn,0,T)), dat);
+observedSummary <- BDsummaryStats.PO(partialData); observedSummary;
+@ Note that the difference between \verb@fullSummary@ and
 \verb@observedSummary@ is some measure of the information we're
 missing.  The MLE under partial observations aspires to be as close to
 the MLE if the full data were observed, ie \verb@MLEs.FullyObserved@.
@@ -236,82 +238,57 @@ vignette to finish relatively quickly.  (If the estimates are not
 close to the MLE, when we try to compute the confidence interval we
 can try to take a square root of a negative.)
 
-You may (and perhaps should) modify the number of iterations to see
+You may (and should!) modify the number of iterations to see
 the EM actually at work.
 
 
-\begin{Schunk}
-\begin{Sinput}
-> iters <- 2
-> tol <- 0.001
-> initParamMat <- getInitParams(numInitParams = 1, summary.PO = observedSummary, 
-+    T = T, beta.immig = beta.immig, diffScale = 100 * dr)
-> EMtime <- system.time(estimators.hist <- EM.BD.SC(initParamMat = initParamMat, 
-+    M = iters, beta.immig = beta.immig, dat = partialData, dr = dr, 
-+    n.fft = n.fft, tol = tol))[3]
-\end{Sinput}
-\begin{Soutput}
-lambdahat     muhat 
-0.2212262 0.5049508 
-[1] "The 1 just finished and the new estimators are"
-lambdahat     muhat 
-0.2847723 0.5595372 
-[1] "The 2 just finished and the new estimators are"
-lambdahat     muhat 
-0.3124456 0.6276225 
-\end{Soutput}
-\begin{Sinput}
-> initParamMat <- matrix(c(0.41, 0.86), nrow = 1)
-> names(initParamMat) <- c("lambdahat", "muhat")
-> iters <- 1
-> EMtime <- system.time(estimators.hist <- EM.BD.SC(initParamMat = initParamMat, 
-+    M = iters, beta.immig = beta.immig, dat = partialData, dr = dr, 
-+    n.fft = n.fft, tol = tol))[3]
-\end{Sinput}
-\begin{Soutput}
-lambdahat     muhat 
-     0.41      0.86 
-[1] "The 1 just finished and the new estimators are"
-lambdahat     muhat 
-0.4079572 0.8643212 
-\end{Soutput}
-\begin{Sinput}
-> EMtime
-\end{Sinput}
-\begin{Soutput}
-elapsed 
- 39.275 
-\end{Soutput}
-\begin{Sinput}
-> estimators.hist
-\end{Sinput}
-\begin{Soutput}
-          [,1]      [,2]
-[1,] 0.4100000 0.8600000
-[2,] 0.4079572 0.8643212
-\end{Soutput}
-\begin{Sinput}
-> Lhat <- estimators.hist[iters + 1, 1]
-> Lhat
-\end{Sinput}
-\begin{Soutput}
-[1] 0.4079572
-\end{Soutput}
-\begin{Sinput}
-> Mhat <- estimators.hist[iters + 1, 2]
-> Mhat
-\end{Sinput}
-\begin{Soutput}
-[1] 0.8643212
-\end{Soutput}
-\begin{Sinput}
-> MLEs.FullyObserved
-\end{Sinput}
-\begin{Soutput}
-lambdahat     muhat 
-0.4025038 1.0268073 
-\end{Soutput}
-\end{Schunk}
+<<runEM>>=
+#########RUN EM
+
+iters <- 1;
+tol <- .001;
+
+#### You should uncomment the following 2 commands and run -- commented for speed, for now.
+## initParamMat <- getInitParams(numInitParams=1, summary.PO=observedSummary, 
+##                                       T=T, beta.immig=beta.immig,
+##                                       diffScale=100*dr);
+
+## EMtime <- system.time(estimators.hist <-
+##                       EM.BD.SC(initParamMat=initParamMat, M=iters, beta.immig=beta.immig,
+##                                dat=partialData, dr=dr, n.fft=n.fft, tol=tol)
+##                       )[3];
+## EMtime;
+
+#### Generic optimization.
+## logLike <- function(rates){
+##   BDloglikelihood.PO(partialDat=partialData, L=exp(rates[1]), m=exp(rates[2]),
+##                      nu=beta.immig*exp(rates[1]), n.fft=1024);
+## }
+## genericEstimates <- optim(initParamMat, logLike, 
+##                           ##method="L-BFGS-B",
+##                           ##lower=c(0.0001, 0.0001, .0001), upper=c(100,100,100),
+##                           control=list(fnscale=-1))
+## print(genericEstimates <- exp(genericEstimates$par))
+## print(logLike(log(genericEstimates)))
+
+
+##Optimal appears to be: c(.4077229, .8642744)
+## Run starting from the optimal to get the right values setup for the CIs:
+initParamMat <- matrix(c(.41,.86),nrow=1);
+names(initParamMat) <- c("lambdahat","muhat")
+iters <- 1;
+EMtime <- system.time(estimators.hist <-
+                      EM.BD.SC(initParamMat=initParamMat, M=iters, beta.immig=beta.immig,
+                               dat=partialData, dr=dr, n.fft=n.fft, tol=tol)
+                      )[3];
+EMtime;
+
+estimators.hist
+Lhat <- estimators.hist[iters+1,1]; Lhat
+Mhat <- estimators.hist[iters+1,2]; Mhat
+MLEs.FullyObserved;
+########### end Run EM
+@ 
 
 
 
@@ -329,37 +306,22 @@ the information matrix using the method for partially-observed data
 from \citet{Louis1982}.  Note that this requires that the estimates for $\lambda$
 and $\mu$ are accurate!
 
-\begin{Schunk}
-\begin{Sinput}
-> IY.a <- getBDinform.PO(partialData, Lhat = Lhat, Mhat = Mhat, 
-+    beta.immig = beta.immig, delta = 0.001)
-> print(IY.a)
-\end{Sinput}
-\begin{Soutput}
-          [,1]      [,2]
-[1,] 21.074748 -6.152115
-[2,] -6.152115  3.606642
-\end{Soutput}
-\begin{Sinput}
-> zScr <- 1.96
-> Iinv <- solve(IY.a)
-> Ldist <- sqrt(Iinv[1, 1]) * zScr
-> Mdist <- sqrt(Iinv[2, 2]) * zScr
-> CI.L <- c(Lhat - Ldist, Lhat + Ldist)
-> CI.L
-\end{Sinput}
-\begin{Soutput}
-[1] -0.1946027  1.0105171
-\end{Soutput}
-\begin{Sinput}
-> CI.M <- c(Mhat - Mdist, Mhat + Mdist)
-> CI.M
-\end{Sinput}
-\begin{Soutput}
-[1] -0.592244  2.320886
-\end{Soutput}
-\end{Schunk}
+<<getCIs>>=
+IY.a <- getBDinform.PO(partialData, Lhat=Lhat, Mhat=Mhat, 
+                         beta.immig=beta.immig, delta=.001)
+print(IY.a);
+zScr <- 1.96;
+Iinv <- solve(IY.a)
+Ldist <- sqrt(Iinv[1,1])*zScr
+Mdist <- sqrt(Iinv[2,2])*zScr
+CI.L <- c(Lhat-Ldist, Lhat+Ldist);CI.L;
+CI.M <- c(Mhat-Mdist, Mhat+Mdist);CI.M;
 
+@ 
+
+<<conclusion,echo=FALSE>>=
+options(continue=" "); ##undo what we set initially
+@ 
 
 \bibliographystyle{biom} %
 \bibliography{DOBADbiblio}

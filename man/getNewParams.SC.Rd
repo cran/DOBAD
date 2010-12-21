@@ -42,31 +42,3 @@ getNewParams.SC(theData,oldParams, beta.immig,  dr = 0.001, r=4,n.fft =
     smaller than prec.tol the program stops; if false then it continues,
     usually printing a warning.}
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-  returns vector of two parameters, c(lambda,mu).
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\examples{
-
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ }
-\keyword{ }% __ONLY ONE__ keyword per line

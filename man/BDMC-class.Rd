@@ -26,9 +26,7 @@ Class \code{"\linkS4class{CTMC}"}, directly.
     \item{getTimes}{\code{signature(object = "BDMC")}: ... }
 	 }
 }
-\references{}
-\author{}
-\note{  }
+
 
 \seealso{
   \link{BDsummaryStats,BDMC-method},

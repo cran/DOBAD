@@ -20,9 +20,7 @@
     CTMC_PO_1 or CTMC_PO_many
   }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
   This function converts data into a nx3 matrix where
   the first column is the starting state, the second is the ending state
@@ -30,25 +28,3 @@
   distinction is made between data from "separate" units or
   separate intervals from the same markov chain.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\examples{
-
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ }
-\keyword{ }% __ONLY ONE__ keyword per line
