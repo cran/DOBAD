@@ -1,0 +1,203 @@
+\documentclass[12pt]{article}
+%\documentclass[article,12pt]{amsart}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The % is the comment character.
+% If you use emacs as a text editor, then the command
+% M-x global-font-lock-mode 
+% will turn on command highlighting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here are packages for fonts, symbols, and graphics
+
+%\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{versions}
+\usepackage{amsmath}
+\usepackage{appendix}
+
+\usepackage{color} %
+\usepackage{times} %
+\usepackage{amsthm} %
+\usepackage{amsfonts} %
+\usepackage[small]{caption} %
+\usepackage{natbib} %
+\usepackage[letterpaper]{geometry} %
+%\usepackage{hyperref} %
+
+
+\usepackage{colortbl}
+\definecolor{myGrey}{rgb}{.7,.75,.75}
+
+\bibpunct{(}{)}{;}{a}{}{,} %
+\setlength{\leftmargini}{4.8mm} %
+\setlength{\leftmargini}{4.8mm} %
+\setlength{\leftmarginii}{4.8mm} %
+\geometry{hmargin={1.34in,1.14in}, vmargin={1.02in,.99in}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here are useful environments. Use them by typing, e.g.
+%  \begin{thm} Statement of theorem \end{thm}
+% Often followed at some point by \begin{proof} Proof \end{proof}
+
+% \newtheorem{thm}{Theorem}[section]
+% \newtheorem{lem}[thm]{\textbf Lemma}
+% \newtheorem{cor}[thm]{Corollary}
+% \newtheorem{prop}[thm]{\textbf Proposition}
+% \newtheorem{crit}[thm]{Criterium}
+% \newtheorem{alg}[thm]{Algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a different environment. Use it the same way and see what it looks
+% like
+
+%\theoremstyle{definition}
+
+% \newtheorem{defn}[thm]{Definition}
+% \newtheorem{conj}[thm]{Conjecture}
+% \newtheorem{exmp}[thm]{\textbf{Examples}}
+% \newtheorem{exe}[thm]{\textbf{Example}}
+% \newtheorem{prob}[thm]{Problem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a different environment. Use it the same way and see what it looks
+% like
+
+% \theoremstyle{remark}
+
+% \newtheorem{rem}[thm]{\textbf{Remark}}
+% \newtheorem{note}[thm]{Note}
+% \newtheorem{claim}[thm]{Claim}  \renewcommand{\theclaim}{}
+% \newtheorem{summ}{Summary}      \renewcommand{\thesumm}{}
+% \newtheorem{case}{Case}
+% \newtheorem{ack}{ACKNOWLEDGEMENTS}        \renewcommand{\theack}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some macros for frequently used commands
+
+\def\R{\mathbb{R}}
+\def\to{\rightarrow}
+\def\der#1#2{\frac{\partial #1}{\partial #2}}  %% This is a partial derivative
+\def\ip#1#2{\left<#1,#2\right>}  %% This is an inner product
+\def\inv#1{\frac{1}{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting stuff
+
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\textwidth}{167mm} \addtolength{\hoffset}{-22mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% No box at the end of proofs
+
+%\renewcommand{\qedsymbol}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Now for the actual document
+
+%%%
+%%%%%%%%%%%%%%macros for this particular document
+%%%
+
+\def\Z{\mathbb{Z}}
+
+
+%I am so confused.  \alpha_1, \sigma_1, \phi_1 are broken but _2 work. what?
+\def\la{\lambda}
+\def\ka{\kappa}
+\def\elrt#1#2{ e^{- \la (#1 -#2)rt} }
+
+%\includeversion{self}
+\excludeversion{self}
+
+%%Do not delete the following line. It is used by the R package documentation
+% \VignetteIndexEntry{ Simulate BDI process Conditional on Partial Observations }
+%%Do not delete the above line. It is used by the R package documentation
+\title{DOBAD Package:  simulation of BDI process conditional on discrete observations}
+
+\author{Charles Doss}
+\date{September 2009}
+
+\begin{document}
+
+
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+
+\vspace{-3.7mm} %
+
+<<preamble,echo=FALSE>>=
+options(continue="+");
+@ 
+
+
+
+
+
+\part{Simulation of a Linear BDI Process, Conditional on Observing it
+  at Discrete Times}
+
+We are demonstrating the use of the
+\begin{verb}
+DOBAD
+\end{verb}
+package's function for conditionally simulating a birth-death
+process,using the methods of \citet{DSHKM2010EM}.  Call the process
+$\{X(t)\}_{t \in \R}$; we will simulate it conditional upon seeing
+data which is the value of the process at a finite number of discrete
+time points.  That is, for times $0=t_0, t_1, \ldots, t_n$, we see the
+state of the process, $X(t_i)$.  Thus the data $D$ is $2$ parts: a
+vector of the times $t_i$, $i= 0, \ldots, n$ and a vector of states at
+each of those times, $s_i$, for $i=0, \ldots, n$ (where $X(t_i) =
+s_i$.
+
+<<sourceCode>>=
+library(DOBAD)
+@ 
+
+Generate a chain, the ``truth'' that we would not observe in practice:
+<<>>=
+L <- .3; m <- .5; 
+nu <- .4
+set.seed(112)
+unobservedChain <- birth.death.simulant(t=5, X0=11, lambda=.3, mu=.5, nu=.4);
+unobservedChain;
+@ 
+Then fix some ``observation times'' and ``observe'' the chain:
+<<>>=
+times <- c(0, .21,.62,.73, 1.44, 1.95, 3.56, 4.17);
+obsData <- getPartialData(times,  unobservedChain);
+obsData;
+@ 
+Now, we do a conditional simulation:
+<<condSim>>=
+nsims <- 5;
+condSims <- sim.condBD(N=nsims, bd.PO=obsData, L=L, m=m, nu=nu);
+condSims[1]
+condSims[4]
+@ 
+<<conclusion, echo=FALSE>>=
+options(continue=" "); ##undo what we set at top
+@ 
+
+\bibliographystyle{biom} %
+\bibliography{DOBADbiblio}
+
+
+\end{document}
+
+
+
+
+

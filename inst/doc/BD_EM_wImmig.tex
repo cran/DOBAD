@@ -1,0 +1,302 @@
+\documentclass[12pt]{article}
+%\documentclass[article,12pt]{amsart}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The % is the comment character.
+% If you use emacs as a text editor, then the command
+% M-x global-font-lock-mode 
+% will turn on command highlighting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here are packages for fonts, symbols, and graphics
+
+%\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{versions}
+\usepackage{amsmath}
+\usepackage{appendix}
+
+\usepackage{color} %
+\usepackage{times} %
+\usepackage{amsthm} %
+\usepackage{amsfonts} %
+\usepackage[small]{caption} %
+\usepackage{natbib} %
+\usepackage[letterpaper]{geometry} %
+%\usepackage{hyperref} %
+
+
+\usepackage{colortbl}
+\definecolor{myGrey}{rgb}{.7,.75,.75}
+
+\bibpunct{(}{)}{;}{a}{}{,} %
+\setlength{\leftmargini}{4.8mm} %
+\setlength{\leftmargini}{4.8mm} %
+\setlength{\leftmarginii}{4.8mm} %
+\geometry{hmargin={1.34in,1.14in}, vmargin={1.02in,.99in}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here are useful environments. Use them by typing, e.g.
+%  \begin{thm} Statement of theorem \end{thm}
+% Often followed at some point by \begin{proof} Proof \end{proof}
+
+% \newtheorem{thm}{Theorem}[section]
+% \newtheorem{lem}[thm]{\textbf Lemma}
+% \newtheorem{cor}[thm]{Corollary}
+% \newtheorem{prop}[thm]{\textbf Proposition}
+% \newtheorem{crit}[thm]{Criterium}
+% \newtheorem{alg}[thm]{Algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a different environment. Use it the same way and see what it looks
+% like
+
+%\theoremstyle{definition}
+
+% \newtheorem{defn}[thm]{Definition}
+% \newtheorem{conj}[thm]{Conjecture}
+% \newtheorem{exmp}[thm]{\textbf{Examples}}
+% \newtheorem{exe}[thm]{\textbf{Example}}
+% \newtheorem{prob}[thm]{Problem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a different environment. Use it the same way and see what it looks
+% like
+
+% \theoremstyle{remark}
+
+% \newtheorem{rem}[thm]{\textbf{Remark}}
+% \newtheorem{note}[thm]{Note}
+% \newtheorem{claim}[thm]{Claim}  \renewcommand{\theclaim}{}
+% \newtheorem{summ}{Summary}      \renewcommand{\thesumm}{}
+% \newtheorem{case}{Case}
+% \newtheorem{ack}{ACKNOWLEDGEMENTS}        \renewcommand{\theack}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some macros for frequently used commands
+
+\def\R{\mathbb{R}}
+\def\to{\rightarrow}
+\def\der#1#2{\frac{\partial #1}{\partial #2}}  %% This is a partial derivative
+\def\ip#1#2{\left<#1,#2\right>}  %% This is an inner product
+\def\inv#1{\frac{1}{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting stuff
+
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\textwidth}{167mm} \addtolength{\hoffset}{-22mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% No box at the end of proofs
+
+%\renewcommand{\qedsymbol}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Now for the actual document
+
+%%%
+%%%%%%%%%%%%%%macros for this particular document
+%%%
+
+\def\Z{\mathbb{Z}}
+
+
+% %I am so confused.  \alpha_1, \sigma_1, \phi_1 are broken but _2 work. what?
+% \def\la{\lambda}
+% \def\ka{\kappa}
+% \def\elrt#1#2{ e^{- \la (#1 -#2)rt} }
+
+%\includeversion{self}
+\excludeversion{self}
+
+% DO NOT DELETE the following line.  It is used by R package documentation.
+% \VignetteIndexEntry{ EM on Full BDI Model }
+% DO NOT DELETE the above line
+\title{DOBAD Package: 
+EM Algorithm on a Partially Observed Linear Birth-Death-Immigration Process}
+
+\author{Charles Doss}
+\date{2009}
+
+\usepackage{Sweave}
+\begin{document}
+
+
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+
+\vspace{-3.7mm} 
+
+
+
+
+
+
+\part{Estimating Rates for Linear Birth-Death-Immigration chain via EM
+  Algorithm}
+
+We are demonstrating the use of the
+\begin{verb}
+DOBAD
+\end{verb}
+package's capability to do estimation of the rate parameters for a
+linear Birth-Death-Immigration (BDI) chain, given partial
+observations, via the Expectation-Maximization (EM) algorithm.  Call
+the chain $\{X(t)\}_{t \in \R}$, and its birth rate $la$ and its death
+rate $\mu$.  Derivations are neater if we only have two parameters.
+In this document, we consider a third parameter, $\nu$, the
+immigration rate.  We will denote $\theta = (la, \mu, \nu)$.  The data
+is the value of the process at a finite number of discrete time
+points.  That is, for some fixed times $0=t_0, t_1, \ldots, t_n$, we
+see the state of the process, $X(t_i)$.  Thus the data, $D$, is $2$
+parts: a vector of the times $t_i$, $i= 0, \ldots, n$ and a vector of
+states at each of those times, $s_i$, for $i=0, \ldots, n$ (where
+$X(t_i) = s_i$.
+
+In order to use the EM algorithm, we need to be able to calculate
+$E(N_i^+| X_0=a, X_T=b)$, $E(N_T^-| X_0=a, X_T=b)$, and $E(R_T| X_0=a,
+X_T=b)$, where $N_i^+$ is the number of jumps up starting in state
+$i$, for $i=0,\ldots, N_T^+$, in the time interval $[0,T]$, $N_T^-$ is
+the number of jumps down in the time interval $[0,T]$, and $R_T$ is
+the total holding time in the interval $[0,T]$ (i.e.  $R_T =
+\sum_{i=0}^\infty id_T(i)$ where $d_T(i)$ is the time spent in state
+$i$ in the interval $[0,T]$).  This code uses the method of
+\citet{DSHKM2010EM} (generating functions) to calculate the latter two
+expectations, and Monte Carlo for the former, which is more
+complicated to calculate.  Thus the algorithm is a Monte Carlo EM
+(MCEM) algorithm.
+
+
+We will set up the true parameters and a true chain, and then ``observe'' it
+partially, and see how the EM does on that data.
+First, set up the true parameters.
+\begin{Schunk}
+\begin{Sinput}
+> library(DOBAD)
+> set.seed(1156)
+> initstate = 4
+> T = 25
+> L <- 0.3
+> mu <- 0.6
+> beta.immig <- 1.2
+> dr <- 1e-06
+> n.fft <- 1024
+> trueParams <- c(L, mu)
+> names(trueParams) <- c("lambda", "mu")
+\end{Sinput}
+\end{Schunk}
+Now we get the ``truth'' and then observe the ``data''
+as well as calculate some information about both.
+\begin{Schunk}
+\begin{Sinput}
+> dat <- birth.death.simulant(t = T, lambda = L, m = mu, nu = L * 
++    beta.immig, X0 = initstate)
+> fullSummary <- BDsummaryStats(dat)
+> fullSummary
+\end{Sinput}
+\begin{Soutput}
+   Nplus   Nminus Holdtime 
+19.00000 23.00000 49.45406 
+\end{Soutput}
+\begin{Sinput}
+> names(fullSummary) <- c("Nplus", "Nminus", "Holdtime")
+> MLEs.FullyObserved <- M.step.SC(EMsuffStats = fullSummary, T = T, 
++    beta.immig = beta.immig)
+> observetimes <- sort(runif(20, min = 0, max = T))
+> partialData <- getPartialData(observetimes, dat)
+> T <- getTimes(partialData)[length(getTimes(partialData))]
+> observedSummary <- BDsummaryStats.PO(partialData)
+> observedSummary
+\end{Sinput}
+\begin{Soutput}
+   Nplus   Nminus Holdtime 
+ 7.00000 10.00000 48.45867 
+\end{Soutput}
+\begin{Sinput}
+> param0 <- c(0.8, 0.9, 1.1)
+> names(param0) <- c("lambdahat", "muhat", "nuhat")
+\end{Sinput}
+\end{Schunk}
+
+
+Note that the difference between \verb@fullSummary@ and
+\verb@observedSummary@ is some measure of the information we're
+missing.  The EM algorithm aspires to the MLEs of the full data, ie
+\verb@MLEs.FullyObserved@.  Now we run the actual EM algorithm. This
+might take a while!  The number of iterations can be lowered but for
+Confidence Intervals to compute without error, the estimates must be
+accurate.
+
+The initial setting is to only do a single iteration of the EM, due to
+its slowness.  Note that the \verb@EM.BD@ function is not available in
+the DOBAD namespace, it requires the prefix \verb@DOBAD:::@.  This
+choice was made due to its slowness at this time.
+
+% <<possiblePartialdata>>=
+
+% #######a possible object that has MLE of 0 for lambda.
+% partialData <- new("CTMC_PO_1", states=c(4,3,2,2,3,3,1,2),
+%                    times=c(0,2,4,6,9.34,10,12,13));
+% partialData2 <- new("CTMC_PO_1", states=c(4,2,19),
+%                    times=c(0,9.432,20.21));
+% partialData <- new("CTMC_PO_many", BDMCsPO=c(partialData,partialData2));
+% param0 <- c(.8,.9,1.1); 
+% names(param0) <- c("lambdahat", "muhat", "nuhat");
+
+% @
+
+\begin{Schunk}
+\begin{Sinput}
+> iters <- 1
+> tol <- 5e-07
+> myInitParamMat <- rbind(c(0.25, 0.26, 0.15))
+> emOuts <- DOBAD:::EM.BD(dat = partialData, init.params.mat = myInitParamMat, 
++    tol = tol, M = iters, dr = 1e-07, n.fft = 1024, alpha = 0.2, 
++    beta = 0.3, fracSimIncr = 3, numMCs.i.start = 20, outputBestHist = FALSE)
+\end{Sinput}
+\begin{Soutput}
+lambdahat     muhat     nuhat 
+     0.25      0.26      0.15 
+[1] "The estimators at step 1 are"
+lambdahat     muhat     nuhat 
+     0.25      0.26      0.15 
+[1] "numMCs for next time is  20"
+\end{Soutput}
+\begin{Sinput}
+> bestparams <- sapply(emOuts, function(emOut) {
++    emOut[[iters + 1]]$newParams
++})
+> print(bestparams)
+\end{Sinput}
+\begin{Soutput}
+                  V1
+lambdahat 0.08261488
+muhat     0.37407910
+nuhat     0.44190461
+\end{Soutput}
+\end{Schunk}
+
+\bibliographystyle{biom} %
+\bibliography{DOBADbiblio}
+
+
+\end{document}
+
+
+
+
+
+
+
