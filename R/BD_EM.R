@@ -64,6 +64,8 @@ BDloglikelihood.PO.list <- function(partialDat,L,m,nu,
 
 BDloglikelihood.PO.default <- BDloglikelihood.PO.list;
 
+
+## see squarem() library(SQUAREM)
 EM.BD.SC <- function(dat, initParamMat, tol=1e-4,M=30, beta.immig, 
                      dr=1e-7, n.fft=1024, r=4, 
                      prec.tol=1e-12, prec.fail.stop=TRUE,
@@ -259,52 +261,6 @@ holdTime <- function(sim){
 
 
 
-
-###################begin utility BDsummaryStats.PO 
-
-if (!isGeneric("BDsummaryStats.PO")) {
-  fun <- function(dat) standardGeneric("BDsummaryStats.PO")
-  setGeneric("BDsummaryStats.PO", fun)
-}
-
-setMethod("BDsummaryStats.PO", "list",
-          definition=
-          function(dat){
-            n <- length(dat$states);
-            T <- dat$times[n];
-            diffs <- dat$states[2:n] - dat$states[1:n-1]
-            maxState <- max(dat$states);
-            Holdtime <- seq(0,maxState,1) %*% waitTimes(dat$states, dat$times, T);
-            results <- c(  sum(diffs[diffs>0]),
-                         abs(sum(diffs[diffs<0])),
-                         Holdtime);
-            names(results) <- c("Nplus", "Nminus", "Holdtime");
-            results;
-          })
-
-setMethod("BDsummaryStats.PO", "CTMC_PO_1",
-          definition=
-          function(dat){
-            n <- length(dat@states);
-            T <- dat@times[n];
-            diffs <- dat@states[2:n] - dat@states[1:n-1]
-            maxState <- max(dat@states);
-            Holdtime <- seq(0,maxState,1) %*% waitTimes(dat@states, dat@times, T);
-            results <- c(  sum(diffs[diffs>0]),
-                         abs(sum(diffs[diffs<0])),
-                         Holdtime);
-            names(results) <- c("Nplus", "Nminus", "Holdtime");
-            results;
-          })
-
-setMethod("BDsummaryStats.PO", "CTMC_PO_many",
-          definition=
-          function(dat){
-            res <- sapply(dat@BDMCsPO, BDsummaryStats.PO)
-            apply(res,1,sum)
-          })
-
-###################end utility BDsummaryStats.PO 
 
 
 

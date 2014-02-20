@@ -125,6 +125,13 @@ if (!isGeneric("getT")) {
   setGeneric("getT", fun)
 }
 
+if (!isGeneric("getTs")) {
+  if (is.function("getTs"))
+    fun <- getT
+  else fun <- function(object) standardGeneric("getTs")
+  setGeneric("getTs", fun)
+}
+
 
 setMethod("getStates", "CTMC", function(object) {object@states});
 setMethod("getStates", "BDMC", function(object) {object@states});
@@ -140,6 +147,11 @@ setMethod("getT", "CTMC_PO_1", function(object) {n <- length(object@times); obje
 setMethod("getT", "CTMC_PO_many", function(object) {Ts <- sapply(object@BDMCsPO, getT);  sum(Ts); });
 setMethod("getT", "CTMC_many", function(object) {Ts <- sapply(object@CTMCs, getT);  sum(Ts); });
 setMethod("getT", "BDMC_many", function(object) {Ts <- sapply(object@CTMCs, getT);  sum(Ts); });
+
+setMethod("getTs", "CTMC_PO_many", function(object) {sapply(object@BDMCsPO, getT);});
+setMethod("getTs", "CTMC_many", function(object) {sapply(object@CTMCs, getT);});
+setMethod("getTs", "BDMC_many", function(object) {sapply(object@CTMCs, getT);});
+
 
 setMethod("[", "CTMC_PO_many", function(x,i,j="missing",...,drop=TRUE){
   new("CTMC_PO_many", BDMCsPO=x@BDMCsPO[i,...,drop=drop])
@@ -176,3 +188,51 @@ list2CTMC <- function(aCTMC){
 
 
 
+
+
+
+###################begin utility BDsummaryStats.PO 
+
+if (!isGeneric("BDsummaryStats.PO")) {
+  fun <- function(dat) standardGeneric("BDsummaryStats.PO")
+  setGeneric("BDsummaryStats.PO", fun)
+}
+
+setMethod("BDsummaryStats.PO", "list",
+          definition=
+          function(dat){
+            n <- length(dat$states);
+            T <- dat$times[n];
+            diffs <- dat$states[2:n] - dat$states[1:n-1]
+            maxState <- max(dat$states);
+            Holdtime <- seq(0,maxState,1) %*% waitTimes(dat$states, dat$times, T);
+            results <- c(  sum(diffs[diffs>0]),
+                         abs(sum(diffs[diffs<0])),
+                         Holdtime);
+            names(results) <- c("Nplus", "Nminus", "Holdtime");
+            results;
+          })
+
+setMethod("BDsummaryStats.PO", "CTMC_PO_1",
+          definition=
+          function(dat){
+            n <- length(dat@states);
+            T <- dat@times[n];
+            diffs <- dat@states[2:n] - dat@states[1:n-1]
+            maxState <- max(dat@states);
+            Holdtime <- seq(0,maxState,1) %*% waitTimes(dat@states, dat@times, T);
+            results <- c(  sum(diffs[diffs>0]),
+                         abs(sum(diffs[diffs<0])),
+                         Holdtime);
+            names(results) <- c("Nplus", "Nminus", "Holdtime");
+            results;
+          })
+
+setMethod("BDsummaryStats.PO", "CTMC_PO_many",
+          definition=
+          function(dat){
+            res <- sapply(dat@BDMCsPO, BDsummaryStats.PO)
+            apply(res,1,sum)
+          })
+
+###################end utility BDsummaryStats.PO 

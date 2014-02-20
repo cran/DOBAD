@@ -79,7 +79,7 @@ chooseSim.condBD.1.CTMC_PO_1 <- function(bd.PO=new("CTMC_PO_1", states=c(5,7,3),
                                        maxARsims=100,
                                        n.fft=1024){
   arg <- CTMCPO2indepIntervals.CTMC_PO_1(bd.PO)
-  simCond <- apply(X=arg, MARG=1,
+  simCond <- apply(X=arg, MARGIN=1,
                    FUN=function(SED){chooseSim.condBD.1(T=SED[3],a=SED[1],b=SED[2],L=L,m=m,nu=nu,n.fft=n.fft,maxARsims=maxARsims)})
   res <- combineCTMC(simCond)
   new("BDMC",times=res$times,states=res$states,T=res$T)
@@ -105,7 +105,7 @@ sim.condBD.main.CTMC_PO_1 <- function(bd.PO=new("CTMC_PO_1", states=c(5,7,3), ti
   endTimes <- getTimes(bd.PO)[2:numObs]
   deltas <- endTimes-startTimes;
   simCondArg <- matrix(data=c(startStates, endStates, deltas), ncol=3);
-  simCond <- apply(X=simCondArg, MARG= 1,
+  simCond <- apply(X=simCondArg, MARGIN= 1,
                    FUN=function(SED){
                      sim.condBD.1(T=SED[3], a=SED[1], b=SED[2], L=L,
                                   m=m, nu=nu,
@@ -125,7 +125,7 @@ sim.condBD.main.list <- function(bd.PO=list(states=c(5,7,3), times=c(0,.4,1)),
   endTimes <- bd.PO$times[2:numObs]
   deltas <- endTimes-startTimes;
   simCondArg <- matrix(data=c(startStates, endStates, deltas), ncol=3);
-  simCond <- apply(X=simCondArg, MARG= 1,
+  simCond <- apply(X=simCondArg, MARGIN= 1,
                    FUN=function(SED){
                      sim.condBD.1(T=SED[3], a=SED[1], b=SED[2], L=L,
                                   m=m, nu=nu,

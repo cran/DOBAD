@@ -23,7 +23,7 @@ graph.CTMC <- function(CTMC, filename=NA, height=6, width=4.5,
   plot(times, states, type="s",
        ylab=ylab, xlab=xlab,...);
   if ( is.character(filename)){
-    require(lattice);
+    ## require(lattice);## alrady required in package
     trellis.device(postscript, file=paste(filename, ".ps", sep=""),
                    horiz=FALSE,
                    height = height, width=width, title=filename);
@@ -59,7 +59,7 @@ graph.CTMC.PO <- function(CTMC, filename=NA,height=6, width=4.5,
        ...);
   if ( is.character(filename)){
 #    filename <- paste(filename, "PO", sep="")
-    require(lattice);
+    ##require(lattice);
     trellis.device(postscript, file=filename, horiz=FALSE,
                    height = height, width=width, title=filename);
       plot(times, states, type=type,

@@ -9,7 +9,8 @@
   time points
 }
 \usage{
-EM.BD.SC(dat, initParamMat, tol = 1e-04, M = 30, beta.immig,  dr = 1e-07, n.fft = 1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE,
+EM.BD.SC(dat, initParamMat, tol = 1e-04, M = 30, beta.immig,  dr =
+1e-07, n.fft = 1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE,
 verbose=1, verbFile=NULL)
 EM.BD.SC.1(dat,init.params, tol = 0.001, M = 30, beta.immig,  dr =
 1e-07, n.fft = 1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE,

@@ -6,13 +6,13 @@ function(rate.fn, jumpLim.fn,T.time, init.state)
  t.sim = T.time
  idx = 1
  v.sz = 16
- v = matrix(0, nc=2, nr=v.sz)
+ v = matrix(0, ncol=2, nrow=v.sz)
  cur = init.state
  while(t.sim > 0)
    {
      if(idx > v.sz)
        {
-         tmp = matrix(0, nc=2, nr=v.sz*2)
+         tmp = matrix(0, ncol=2, nrow=v.sz*2)
          tmp[1:v.sz,] = v
          v = tmp
          v.sz = v.sz * 2

@@ -54,42 +54,48 @@ prec.tol=1e-12, prec.fail.stop=TRUE)
 add.joint.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4)
 rem.joint.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4)
 timeave.joint.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4)
-add.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024, r=4,
+add.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,trans.prob=NULL,
+joint.mean=NULL,delta=1e-04,n=1024, r=4,
 prec.tol=1e-12, prec.fail.stop=TRUE)
-rem.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024, r=4,
+rem.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,trans.prob=NULL,
+joint.mean=NULL,delta=1e-04,n=1024, r=4,
 prec.tol=1e-12, prec.fail.stop=TRUE)
-timeave.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4,
+timeave.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,trans.prob=NULL,
+joint.mean=NULL, delta=1e-04,n=1024,r=4,
 prec.tol=1e-12, prec.fail.stop=TRUE)
-hold.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4,
-prec.tol=1e-12, prec.fail.stop=TRUE)
-add.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
+hold.cond.mean.one(t,lambda,mu,nu=0,X0=1,Xt, trans.prob=NULL,joint.mean=NULL,
+delta=1e-04,n=1024,r=4,prec.tol=1e-12, prec.fail.stop=TRUE)
+add.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, joint.mean=NULL, delta = 0.001,
  n=1024,r=4)
-add.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001, n
+add.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, trans.prob=NULL,
+joint.mean=NULL, delta = 0.001, n
 = 1024,r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
 addrem.joint.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
 n = 1024,r=4)
-addrem.cond.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
-n = 1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE)
+addrem.cond.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, trans.prob=NULL,
+delta = 0.001,n = 1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE)
 addhold.joint.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
 n = 1024,r=4)
-addhold.cond.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
-n = 1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
-remhold.joint.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
+addhold.cond.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, 
+trans.prob=NULL, delta = 0.001, n = 1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
+remhold.joint.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 1e-04,
 n = 1024,r=4)
-remhold.cond.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
+remhold.cond.mean.one(t, lambda, mu, nu = 0, X0 = 1, Xt,
+trans.prob=NULL, delta = 1e-04,
 n = 1024,r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
-add.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
-n = 1024,r=4)
-add.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
+add.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, joint.mean=NULL,
+delta = 0.001, n = 1024,r=4)
+add.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt,
+trans.prob=NULL,joint.mean=NULL, delta = 0.001,
 n= 1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE )
-rem.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
-n = 1024,r=4)
-rem.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, delta = 0.001,
-n = 1024,r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
+rem.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt,
+joint.mean=NULL, delta = 0.001, n = 1024,r=4)
+rem.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, trans.prob=NULL,
+joint.mean=NULL, delta = 0.001,n = 1024,r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
 hold.joint.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, r=4,  n = 1024,
 delta = 0.0001)
-hold.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, n
-= 1024,delta = 0.0001, r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
+hold.cond.meanSq.one(t, lambda, mu, nu = 0, X0 = 1, Xt, trans.prob=NULL,
+n= 1024,delta = 0.0001, r=4, prec.tol=1e-12, prec.fail.stop=TRUE)
 all.cond.mean.PO(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,
 prec.tol=1e-12, prec.fail.stop=TRUE)
 all.cond.mean2.PO(data,lambda,mu,nu=0,delta=0.001,n=1024,r=4,
@@ -104,7 +110,21 @@ prec.tol=1e-12,  prec.fail.stop=TRUE)
   \item{Xt}{ending state, a non-negative integer}
   \item{data}{CTMC_PO_1 or an analogous list. List isn't always
     accepted (in all.cond.mean functions it isn't). all.cond.means
-  both accept CTMC_PO_1 or CTMC_PO_many.}
+    both accept CTMC_PO_1 or CTMC_PO_many.}
+  \item{trans.prob}{Either NULL or a precomputed transition
+    probability for a process with the parameters passed in.  This saves
+    the repeated computation of the same transition probability
+    for multiple conditional expectations over the same interval. If
+    NULL, the probability will just be computed in the function.}
+  \item{joint.mean}{This is a parameter in some of the computations for
+    some squared means. It is either NULL or the corresponding (first-order,
+    unsquared) mean.  If NULL the probability will just be
+    computed in the function. (It is needed to convert a factorial mean
+    to a squared mean.) Note that this is ALWAYS an unsquared mean,
+    regardless of whether the function is a *.meanSq.* or a *.mean.*
+    function.  In the latter case, if a non-NULL value is passed, the
+    called function doesn't do much
+    besides divide.}
   \item{delta}{increment length used in numerical differentiation}
   \item{n}{number of coefficients to pull off via FFT, in *.one
     functions this number determines the number of intervals in the

@@ -7,7 +7,7 @@
 # (ie expectation of negative 2nd deriv of log likelihood)
 # This _doesn't_ check that the expectation is calculated with the same
 # parameters that are passed in. Parameters are assumed to be true.
-getBDinform.full.manual <- function(ENplus, ENminus, L, m){
+getBDinform.full.SC.manual <- function(ENplus, ENminus, L, m){
   result <- matrix(data=NA, nrow=2, ncol=2);
   result[1,1] = ENplus / L^2;
   result[2,2] = ENminus / m^2
@@ -17,7 +17,7 @@ getBDinform.full.manual <- function(ENplus, ENminus, L, m){
 
 #Louis '82 paper gives method for computing information
 # This computes I_(X|Y) given true parameters
-getBDinform.lost.manual <- function(ENplus, ENminus, EHoldtime,
+getBDinform.lost.SC.manual <- function(ENplus, ENminus, EHoldtime,
                              ENplusSq, ENminusSq, EHoldtimeSq,
                              ENplusNminus, ENplusHoldtime, ENminusHoldtime,
                              L, m, beta.immig, T){
@@ -33,7 +33,7 @@ getBDinform.lost.manual <- function(ENplus, ENminus, EHoldtime,
 #NOTE: This doesn't calculate the last term in (3.2) in Louis ('82)
 #since it is 0 for any thetahat satisfying the likelihood equation.
 ## Careful about T: make sure it corresponds with ENplus, etc
-getBDinform.PO.manual <- function(ENplus, ENminus, EHoldtime,
+getBDinform.PO.SC.manual <- function(ENplus, ENminus, EHoldtime,
                              ENplusSq, ENminusSq, EHoldtimeSq,
                              ENplusNminus, ENplusHoldtime, ENminusHoldtime,
                              L, m, beta.immig, T){
@@ -42,8 +42,8 @@ getBDinform.PO.manual <- function(ENplus, ENminus, EHoldtime,
 #    BDloglikelihood.PO(partialDat=partialDat, L=L,m=m,nu=beta.immig*L);
 #  }
   
-  tmp1 <- getBDinform.full.manual(ENplus, ENminus, L, m)
-  tmp2 <- getBDinform.lost.manual(ENplus, ENminus, EHoldtime,
+  tmp1 <- getBDinform.full.SC.manual(ENplus, ENminus, L, m)
+  tmp2 <- getBDinform.lost.SC.manual(ENplus, ENminus, EHoldtime,
                                   ENplusSq, ENminusSq, EHoldtimeSq,
                                   ENplusNminus, ENplusHoldtime, ENminusHoldtime,
                                   L, m, beta.immig, T);
@@ -91,7 +91,7 @@ getBDsummaryProdExpecs <- function(sims, getsd=FALSE){
 
 
 BDPOloglikeGradSqr.CTMC_PO_many <- function(partialDat, L,m, beta, n.fft=1024){
-  require(numDeriv)
+  ##require(numDeriv) ## in depends
   myLike <- function(theta){
     BDloglikelihood.PO.CTMC_PO_many(partialDat=partialDat,
                                     L=theta[1],m=theta[2],nu=theta[1]*beta, n.fft=n.fft);
@@ -101,7 +101,7 @@ BDPOloglikeGradSqr.CTMC_PO_many <- function(partialDat, L,m, beta, n.fft=1024){
 }
 
 BDPOloglikeGradSqr.CTMC_PO_1 <- function(partialDat, L,m, beta, n.fft=1024){
-  require(numDeriv)
+  ##require(numDeriv) ## in depends
   myLike <- function(theta){
     BDloglikelihood.PO.CTMC_PO_1(partialDat=partialDat,
                                  L=theta[1],m=theta[2],nu=theta[1]*beta, n.fft=n.fft);
@@ -118,10 +118,16 @@ getBDinform.PO.0term.CTMC_PO_many <- function(partialData, Lhat,Mhat,beta.immig,
                                         delta=1e-3, n=1024, r=4, prec.tol=1e-12,
                                         prec.fail.stop=1){
   myGetBDInform <- function(ctmc1){
-    getBDinform.PO(partialData=ctmc1, Lhat=Lhat,Mhat=Mhat,
-                             beta.immig=beta.immig, delta=delta, n=n,
-                             r=r, prec.tol=prec.tol,
-                             prec.fail.stop=prec.fail.stop)
+    ## getBDinform.PO(partialData=ctmc1, Lhat=Lhat,Mhat=Mhat,
+    ##                          beta.immig=beta.immig, delta=delta, n=n,
+    ##                          r=r, prec.tol=prec.tol,
+    ##                          prec.fail.stop=prec.fail.stop)
+    ## ## renamed getBDinform.PO to getBDinform.PO.SC
+    getBDinform.PO.SC(partialData=ctmc1, Lhat=Lhat,Mhat=Mhat,
+                      beta.immig=beta.immig, delta=delta, n=n,
+                      r=r, prec.tol=prec.tol,
+                      prec.fail.stop=prec.fail.stop)
+
   }
   my0term <- function(ctmc1){
     BDPOloglikeGradSqr.CTMC_PO_1(partialDat=ctmc1, L=Lhat,m=Mhat,beta=beta.immig,n.fft=n)
@@ -154,10 +160,17 @@ getBDinform.PO.0term.CTMC_1 <- function(partialData, Lhat,Mhat,beta.immig,
                                         delta=1e-3, n=1024, r=4, prec.tol=1e-12,
                                         prec.fail.stop=1){
   myGetBDInform <- function(ctmc1){
-    getBDinform.PO(partialData=ctmc1, Lhat=Lhat,Mhat=Mhat,
-                             beta.immig=beta.immig, delta=delta, n=n,
-                             r=r, prec.tol=prec.tol,
-                             prec.fail.stop=prec.fail.stop)
+    ## getBDinform.PO(partialData=ctmc1, Lhat=Lhat,Mhat=Mhat,
+    ##                          beta.immig=beta.immig, delta=delta, n=n,
+    ##                          r=r, prec.tol=prec.tol,
+    ##                          prec.fail.stop=prec.fail.stop)
+
+    ## ##  haven't tested but changing from getBDinform.PO to getBDinform.PO.SC
+    getBDinform.PO.SC(partialData=ctmc1, Lhat=Lhat,Mhat=Mhat,
+                   beta.immig=beta.immig, delta=delta, n=n,
+                   r=r, prec.tol=prec.tol,
+                   prec.fail.stop=prec.fail.stop)
+
   }
   my0term <- function(ctmc1){
     BDPOloglikeGradSqr.CTMC_PO_1(partialDat=ctmc1, L=Lhat,m=Mhat,beta=beta.immig,n.fft=n)
@@ -181,11 +194,13 @@ getBDinform.PO.0term.CTMC_1 <- function(partialData, Lhat,Mhat,beta.immig,
 ######  observed information via direct numeric calculation of hessian
 ###### (using numderiv package)
 
+
+## rename, getBDinform.PO.SC.numeric
 getBDinform.numeric <- function(partialData, Lhat,Mhat,beta.immig,
                                 delta=1e-3,
                                 r=4,
                                 n.fft=1024){
-  require(numDeriv)
+  ##require(numDeriv) ## in Depends field of namepsace
   myLike <- function(theta){ ##ctmcpo1 or ctmcpomany
     BDloglikelihood.PO(partialDat=partialData,
                        L=theta[1],m=theta[2],nu=theta[1]*beta.immig,

@@ -102,7 +102,7 @@ bdARsimCondEnd <- function(Naccepted=NULL, Ntotal=NULL, Nmax=NULL,
   numInts <- length(deltas);
   simCondArg <- matrix(data=c(startStates, endStates, deltas), ncol=3);
   simCond <- vector("list", numInts);
-  simCond <- apply(X=simCondArg, MARG= 1,
+  simCond <- apply(X=simCondArg, MARGIN= 1,
                    FUN=function(SED){
                      bdARsimCondEnd.1(Naccepted=Naccepted, Ntotal=Ntotal,
                                       Nmax=Nmax,

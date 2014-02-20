@@ -1,7 +1,9 @@
 importFrom(graphics, plot)
+importFrom(numDeriv, genD, hessian)
+import(methods)
 exportClasses(CTMC, BDMC, CTMC_PO_1, CTMC_PO_many)
 exportMethods(BDsummaryStats, BDsummaryStats.PO)
-exportMethods(getStates, getTimes, getT)
+exportMethods(getStates, getTimes, getT, getTs)
 exportMethods(getBDMCsPOlist)
 exportMethods(plot)
 exportMethods( "[", "[[")
@@ -22,11 +24,23 @@ S3method(CTMCPO2indepIntervals, CTMC_PO_1)
 S3method(CTMCPO2indepIntervals, CTMC_PO_many)
 export(bdARsimCondEnd.1,
       getBDjTimes,  ARsim)
-exportPattern(".*cond[.]mean.*")
+
+export(add.cond.mean.one,
+       rem.cond.mean.one,
+       hold.cond.mean.one,
+       timeave.cond.mean.one,
+       addrem.cond.mean.one,
+       addhold.cond.mean.one,
+       remhold.cond.mean.one,
+       add.cond.meanSq.one,
+       rem.cond.meanSq.one,
+       hold.cond.meanSq.one)
+exportPattern(".*cond[.]mean[.]many")
+
 exportPattern(".*[.]generator$")
 exportPattern(".*process[.]prob.[[^f][^f][^t][^a][^r][^g]]*")
 export(CTMC2list,list2CTMC)
-export(getBDinform.PO)
+export(getBDinform.PO.SC)
 export(getInitParams)
 
 exportPattern(".*NijBD.*")

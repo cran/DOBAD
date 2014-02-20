@@ -1,5 +1,5 @@
 getDataSummary.CTMC_PO_many <- function(dat,file="dataSummary.rsav"){
-  myIndepInts <- DOBAD:::CTMCPO2indepIntervals.CTMC_PO_many(dat)
+  myIndepInts <- CTMCPO2indepIntervals.CTMC_PO_many(dat)
   myN <- length(dat@BDMCsPO);
   myIntLens <- myIndepInts[,3]
   myNumInts <- length(myIndepInts[,1]);

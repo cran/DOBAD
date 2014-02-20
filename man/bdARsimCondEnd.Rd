@@ -10,8 +10,11 @@
   reject (ie marginal simulation and accepting if it has the right end state).
 }
 \usage{
-bdARsimCondEnd(Naccepted = NULL, Ntotal = NULL,Nmax=NULL, bd.PO = new("CTMC_PO_1", states = c(5, 7, 3), times = c(0, 0.4, 1)), L = 0.5, m = 0.7, nu = 0.4)
-bdARsimCondEnd.1(Naccepted = NULL, Ntotal = NULL, Nmax=NULL, T = 1.02, L = 0.3, m = 0.4, nu = 0.1, a = 8, b = 9)
+bdARsimCondEnd(Naccepted = NULL, Ntotal = NULL,Nmax=NULL,
+ bd.PO = new("CTMC_PO_1", states = c(5, 7, 3),
+ times = c(0, 0.4, 1)), L = 0.5, m = 0.7, nu = 0.4)
+bdARsimCondEnd.1(Naccepted = NULL, Ntotal = NULL, Nmax=NULL,
+T = 1.02, L = 0.3, m = 0.4, nu = 0.1, a = 8, b = 9)
 }
 \arguments{
   \item{Naccepted}{

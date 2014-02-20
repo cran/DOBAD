@@ -1,5 +1,6 @@
 \name{getBDinform.PO}
 \alias{getBDinform.PO}
+\alias{getBDinform.PO.SC}
 \title{Get Information Matrix for MLE estimates on
   Partially Observed Linear Birth Death (_S_pecial _C_ase
   with constrained immigration)}
@@ -12,7 +13,7 @@
   associated.
 }
 \usage{
-getBDinform.PO(partialData,Lhat,Mhat, beta.immig,delta=.001,
+getBDinform.PO.SC(partialData,Lhat,Mhat, beta.immig,delta=.001,
             n=1024,r=4, prec.tol=1e-12,prec.fail.stop=TRUE)
 }
 \arguments{

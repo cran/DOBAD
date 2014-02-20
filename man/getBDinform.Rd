@@ -1,7 +1,7 @@
 \name{getBDinform}
-\alias{getBDinform.lost.manual}
-\alias{getBDinform.PO.manual}
-\alias{getBDinform.full.manual}
+\alias{getBDinform.lost.SC.manual}
+\alias{getBDinform.PO.SC.manual}
+\alias{getBDinform.full.SC.manual}
 \title{Helpers for Getting Information Matrix for MLE estimates on
   Partially Observed Linear Birth Death (_S_pecial _C_ase
   with constrained immigration)}
@@ -14,12 +14,12 @@
   information matrix.
 }
 \usage{
-getBDinform.full.manual(ENplus, ENminus, L, m)
-getBDinform.lost.manual(ENplus, ENminus, EHoldtime,
+getBDinform.full.SC.manual(ENplus, ENminus, L, m)
+getBDinform.lost.SC.manual(ENplus, ENminus, EHoldtime,
                              ENplusSq, ENminusSq, EHoldtimeSq,
                              ENplusNminus, ENplusHoldtime, ENminusHoldtime,
                              L, m, beta.immig, T)
-getBDinform.PO.manual(ENplus, ENminus, EHoldtime,
+getBDinform.PO.SC.manual(ENplus, ENminus, EHoldtime,
                              ENplusSq, ENminusSq, EHoldtimeSq,
                              ENplusNminus, ENplusHoldtime, ENminusHoldtime,
                              L, m, beta.immig, T)
@@ -64,11 +64,11 @@ getBDinform.PO.manual(ENplus, ENminus, EHoldtime,
   
   See equations 3.2 and 3.3 in the Louis paper for the notation.
   
-  getBDinform.lost.manual computes \eqn{I_{X|Y}}{I_x|y}.
+  getBDinform.lost.SC.manual computes \eqn{I_{X|Y}}{I_x|y}.
 
-  getBDinform.full.manual computes \eqn{I_{X}}{I_x}.
+  getBDinform.full.SC.manual computes \eqn{I_{X}}{I_x}.
 
-  getBDinform.PO.manual computes \eqn{I_{Y}}{I_y} (i.e. the difference
+  getBDinform.PO.SC.manual computes \eqn{I_{Y}}{I_y} (i.e. the difference
   between the other two functions).
 
   They have the "manual" suffix because the user passes in the

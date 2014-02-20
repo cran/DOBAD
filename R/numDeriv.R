@@ -6,7 +6,6 @@
 
 
 
-
 ##sides: +1 from above, -1 from below
 ## might be able to get better approx by allowing some to be 2-sided..
 genDoneSided <- function (func, x, sides, method = "Richardson",

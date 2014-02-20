@@ -111,59 +111,162 @@ hold.uncond.mean.one <-function(t,X0,lambda,mu,nu,
 }
 
 
-addrem.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean = addrem.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,delta=delta,n=n, r=r)
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="remhold.cond.mean.one");
-##   if(joint.mean < 10^-13){
-##     stop("addrem.cond.mean.one: joint.mean too small");
-##     #return(NA)
-##   }else{
-##     return(joint.mean/trans.prob)
-##   }
-}
-
-addhold.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean <- addhold.joint.mean.one(t,lambda,mu,nu=nu,X0=X0,Xt=Xt,delta=delta,
-                                       n=n, r=r);
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n);
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="addhold.cond.mean.one");
-##   if (joint.mean < 10^-13) {stop("addhold.cond.mean.one: joint.mean too small")}
-##   else
-##     return(joint.mean/trans.prob)
-}
 
 
 
-remhold.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,  r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean <- remhold.joint.mean.one(t,lambda,mu,nu=nu,X0=X0,Xt=Xt,delta=delta,n=n,r=r);
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n);
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="remhold.cond.mean.one");
-##   if (joint.mean < 10^-13) {
-##     stop("remhold.cond.mean.one: joint mean too small.");
-##     #return(NA)
-##   }
-##   else
-##     return(joint.mean/trans.prob)
-}
 
 
-hold.cond.meanSq.one <- function(t,lambda,mu,nu=0,X0=1,Xt, n=1024,delta=1e-4,r=4,
-                                 prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean <- hold.joint.meanSq.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,
-                                      Xt=Xt, n=n, delta=delta, r=r);
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="hold.cond.meanSq.one");
-  ##   if (joint.mean<10^-13) {
-  ##     stop("hold.cond.meanSq.one: joint mean too small.");
-##                                         #return(NA)
-##   }
-##   else return(joint.mean/trans.prob);
-}
+
+
+####################################################
+######## All the below *.cond.mean*.one are now in BD_calc_helpers.R via the Curry function
+################################################################
+
+## addrem.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                  trans.prob=NULL, joint.mean=NULL,
+##                                  delta=0.001,n=1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
+##   if (is.null(joint.mean))
+##     joint.mean <- addrem.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
+##                                         delta=delta,n=n, r=r)
+##   if(is.null(trans.prob))
+##     trans.prob <- process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="remhold.cond.mean.one");
+## }
+
+
+## addhold.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                   trans.prob=NULL,
+##                                   delta=0.001,n=1024,r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
+##   joint.mean <- addhold.joint.mean.one(t,lambda,mu,nu=nu,X0=X0,Xt=Xt,delta=delta,
+##                                        n=n, r=r);
+##   if(is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n);
+##   prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="addhold.cond.mean.one");
+## }
+
+## remhold.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                   trans.prob=NULL,
+##                                   delta=0.001,n=1024,  r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
+##   joint.mean <- remhold.joint.mean.one(t,lambda,mu,nu=nu,X0=X0,Xt=Xt,
+##                                        delta=delta,n=n,r=r);
+##   if(is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n);
+##   prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="remhold.cond.mean.one");
+## ##   if (joint.mean < 10^-13) {
+## ##     stop("remhold.cond.mean.one: joint mean too small.");
+## ##     #return(NA)
+## ##   }
+## ##   else
+## ##     return(joint.mean/trans.prob)
+## }
+
+
+## hold.cond.meanSq.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                  trans.prob=NULL,
+##                                  n=1024,delta=1e-4,r=4,
+##                                  prec.tol=1e-12, prec.fail.stop=TRUE){
+##     joint.meanSq <- hold.joint.meanSq.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,
+##                                       Xt=Xt,
+##                                       n=n, delta=delta, r=r);
+##   if(is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.meanSq,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="hold.cond.meanSq.one");
+##   ##   if (joint.mean<10^-13) {
+##   ##     stop("hold.cond.meanSq.one: joint mean too small.");
+## ##                                         #return(NA)
+## ##   }
+## ##   else return(joint.mean/trans.prob);
+## }
+
+## rem.cond.meanSq.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                 trans.prob=NULL, joint.mean=NULL,
+##                                 delta=0.001,n=1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
+##   joint.meanSq = rem.joint.meanSq.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
+##     joint.mean=joint.mean,
+##     delta=delta,n=n, r=r)
+##   if (is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.meanSq,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="rem.cond.meanSq.one");
+## }
+
+## add.cond.meanSq.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                 trans.prob=NULL, joint.mean=NULL,
+##                                 delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
+##   joint.meanSq = add.joint.meanSq.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
+##     joint.mean=joint.mean,
+##     delta=delta,n=n,r=r)
+##   if(is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.meanSq,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="rem.cond.meanSq.one");
+## }
+
+
+## add.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4,
+##                               trans.prob=NULL, joint.mean=NULL,
+##                               prec.tol=1e-12, prec.fail.stop=TRUE){
+##   if (is.null(joint.mean))
+##     joint.mean <- add.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
+##                                      delta=delta,n=n,r=r);
+##   if (is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
+##                        fnid="add.cond.mean.one");
+## }
+
+## rem.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                               trans.prob=NULL,
+##                               delta=0.001,n=1024,r=4,
+##                               prec.tol=1e-12, prec.fail.stop=TRUE){
+##   joint.mean = rem.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
+##     delta=delta,n=n,r=r)
+##   if(is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="timeave.cond.mean.one");
+## }
+
+
+## timeave.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,
+##                                   trans.prob=NULL,
+##                                   delta=0.001,n=1024,r=4,
+##                                   prec.tol=1e-12, prec.fail.stop=TRUE){
+##   joint.mean = timeave.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
+##     delta=delta,n=n, r=r)
+##   if(is.null(trans.prob))
+##     trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
+##   prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
+##                      fnid="timeave.cond.mean.one");
+## }
+
+## hold.cond.mean.one <- timeave.cond.mean.one
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #
@@ -304,34 +407,198 @@ process.prob.one.fft <- function (t, lambda, mu, nu = 0, X0 = 1, Xt, n = 1024)
 
 
 
-add.cond.meanSq.one = function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean = add.joint.meanSq.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,delta=delta,n=n,r=r)
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="rem.cond.meanSq.one");
-##   if(joint.mean < 10^-12){
-##     stop("add.cond.meanSq.one: jointmean too small");
-##   }else{
-##     return(joint.mean/trans.prob)
-##   }
-}
+
+## ##tested all.cond.mean and all.cond.mean2
+## all.cond.mean.PO.new <- function(data,lambda,mu,nu=0,
+##                                     delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
+##   theArg <- CTMCPO2indepIntervals(data);  ##accepts either ctmcpo1 or ctmcpomany
+##   #### SHOULD PRECOMPUTE transition probabilities AND PASS THEM IN 
+##   Nplus <- sum(apply(theArg, 1, function(arg){
+##     add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##                       delta=delta,n=n, r=r, prec.tol=prec.tol, prec.fail.stop=prec.fail.stop)
+##   }))
+##   Nminus <- sum(apply(theArg, 1, function(arg){
+##     rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n, prec.tol=prec.tol, r=r,prec.fail.stop=prec.fail.stop)
+##   }))
+##   Holdtime <- sum(apply(theArg, 1, function(arg){
+##     hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n, prec.tol=prec.tol, r=r,prec.fail.stop=prec.fail.stop)
+##   }))
+##   res <- c(Nplus,Nminus,Holdtime);
+##   names(res) <- c("Nplus","Nminus","Holdtime");
+##   return(res);
+## }
 
 
 
-add.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4,
-                              prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean = add.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
-    delta=delta,n=n,r=r);
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                       fnid="add.cond.mean.one");
-##   if(joint.mean < 10^-13){
-##     stop("add.cond.mean.one: joint mean too small.");
-##     ##return(NA)
-##   }else{
-##     return(joint.mean/trans.prob)
-##   }
-}
+## # '2' = second-order means, ie meansquares and crossproducts
+## ## Well, apparently this is slower than the original "all.cond.mean2.PO",
+## ## despite the fact that it does less actual slow computations. Apparently
+## ## the increased calls to apply() are all that really matter.  Forgot the
+## ## golden rule of never worrying about speed in R
+## ## (Also, I tested 'mapply' vs. 'apply' and the mapply calls apparently seem to be faster
+## ## (the time to do a cbind is insignificant).  I don't understand this.
+## all.cond.mean2.PO.new <- function(data,lambda,mu,nu=0,
+##                                   delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
+##   theArg <- CTMCPO2indepIntervals(data); ##accepts either ctmcpo1 or ctmcpomany
+##   ##Get E(N+^2 | all data)
+
+##   argList <- list(lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r,
+##                    prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
+##   trans.probs <- mapply(process.prob.one,
+##                         t=theArg[,3],
+##                         X0=theArg[,1],
+##                         Xt=theArg[,2],
+##                         MoreArgs=list(lambda=lambda, mu=mu,nu=nu),
+##                         SIMPLIFY=TRUE) ## mapply or apply faster once we already have theArg?
+
+##   ## ENplusSq.sumi <- sum(mapply(add.cond.meanSq.one,
+##   ##                             t=theArg[,3],
+##   ##                             X0=theArg[,1],
+##   ##                             Xt=theArg[,2],
+##   ##                             trans.prob=trans.probs,
+##   ##                             MoreArgs=argList,
+##   ##                             SIMPLIFY=TRUE))
+  
+##   theArg <- cbind(theArg, trans.probs) ##used for prod-means, e.g. addrem
+  
+##   ENplusi.joint <- apply(theArg, 1, function(arg){
+##     add.joint.mean.one(t=arg[3],X0=arg[1],Xt=arg[2], 
+##                        lambda=lambda,mu=mu,nu=nu,
+##                        delta=delta,n=n,r=r)
+##   })
+
+##   ENminusi.joint <- apply(theArg,1,function(arg){
+##     rem.joint.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],
+##                        lambda=lambda,mu=mu,nu=nu,
+##                        delta=delta,n=n,r=r)
+##   })
+
+##   EHoldtimei.joint <- apply(theArg,1,function(arg){
+##     hold.joint.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],
+##                         lambda=lambda,mu=mu,nu=nu,
+##                         delta=delta,n=n,r=r)
+##   })
+
+  
+##   ## ENplusi <- apply(theArg, 1, function(arg){
+##   ##   add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2], trans.prob=arg[4],
+##   ##                     joint.mean=,
+##   ##                     lambda=lambda,mu=mu,nu=nu,
+##   ##                     delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   ## })
+  
+##   ENplusi <- mapply(add.cond.mean.one,
+##                     t=theArg[,3],
+##                     X0=theArg[,1],
+##                     Xt=theArg[,2],
+##                     trans.prob=trans.probs,
+##                     joint.mean=ENplusi.joint,
+##                     MoreArgs=argList,
+##                     SIMPLIFY=TRUE)
+##   ENplusSq.sumi <- sum(mapply(add.cond.meanSq.one,
+##                     t=theArg[,3],
+##                     X0=theArg[,1],
+##                     Xt=theArg[,2],
+##                     trans.prob=trans.probs,
+##                     joint.mean=ENplusi.joint,
+##                     MoreArgs=argList,
+##                     SIMPLIFY=TRUE))
+##   ## ENplusSq.sumi <- sum(apply(theArg, 1, function(arg){
+##   ##   add.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],
+##   ##                       trans.prob=arg[4],
+##   ##                       lambda=lambda,mu=mu,nu=nu,                        
+##   ##                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   ## }))
+##   sqENplus.sumi <- sum(ENplusi^2)
+##   ENplus <- sum(ENplusi)
+##   NplusSq <- ENplusSq.sumi-sqENplus.sumi + ENplus^2; #final answer.
+  
+##   ##Get E(N-^2 | all data)
+
+##   ENminusi <- mapply(rem.cond.mean.one,
+##                      t=theArg[,3], X0=theArg[,1], Xt=theArg[,2],
+##                      trans.prob=trans.probs, joint.mean=ENminusi.joint,
+##                      MoreArgs=argList, SIMPLIFY=TRUE)
+                        
+##   ## ENminusi <- apply(theArg, 1, function(arg){
+##   ##   rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##   ##                     delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   ## })
+
+##   ENminusSq.sumi <- sum(mapply(rem.cond.meanSq.one,
+##                            t=theArg[,3], X0=theArg[,1], Xt=theArg[,2],
+##                            trans.prob=trans.probs, joint.mean=ENminusi.joint,
+##                            MoreArgs=argList,
+##                            SIMPLIFY=TRUE))
+##   ## ENminusSq.sumi <- sum(apply(theArg, 1, function(arg){
+##   ##   rem.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   ## }))
+##   sqENminus.sumi <- sum(ENminusi^2)
+##   ENminus <- sum(ENminusi)
+##   NminusSq <- ENminusSq.sumi-sqENminus.sumi + ENminus^2; #final answer.
+
+##   ##Get E(R^2 | all data)
+##   ##   EHoldtimei <- apply(theArg, 1, function(arg){
+##   ##   hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   ## });
+##   EHoldtimei <- mapply(hold.cond.mean.one,
+##                        t=theArg[,3], X0=theArg[,1], Xt=theArg[,2],
+##                        trans.prob=trans.probs,
+##                        joint.mean=EHoldtimei.joint, ## not  necesary for holdtime to precompute..
+##                        MoreArgs=argList, SIMPLIFY=TRUE)
+
+##   EHoldtimeSq.sumi <- sum(mapply(hold.cond.meanSq.one,
+##                                  t=theArg[,3], X0=theArg[,1], Xt=theArg[,2],
+##                                  trans.prob=trans.probs,
+##                                  MoreArgs=argList, SIMPLIFY=TRUE))
+  
+##   ## EHoldtimeSq.sumi <- sum(apply(theArg, 1, function(arg){
+##   ##   hold.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   ## }))  
+##   sqEHoldtime.sumi <- sum(EHoldtimei^2)
+##   EHoldtime <- sum(EHoldtimei)
+##   HoldtimeSq <- EHoldtimeSq.sumi-sqEHoldtime.sumi + EHoldtime^2; #final answer.
+  
+##   ##Get E( (N+)(N-) | all data )
+##   ENplusNminus.sumi <- sum(apply(theArg, 1, function(arg){
+##     addrem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2], trans.prob=arg[4],
+##                          lambda=lambda,mu=mu,nu=nu,
+##                          delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   ENplusENminus.sumi <- sum(ENplusi*ENminusi)
+##   ##ENplus,ENminus already computed
+##   NplusNminus <- ENplusNminus.sumi - ENplusENminus.sumi + ENplus*ENminus;
+
+##   ##Get E( (N+)R | all data )
+##   ENplusHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     addhold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2], trans.prob=arg[4],
+##                           lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r,
+##                           prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   ENplusEHoldtime.sumi <- sum(ENplusi*EHoldtimei)
+##   ##ENplus Eholdtime already computed
+##   NplusHoldtime <- ENplusHoldtime.sumi - ENplusEHoldtime.sumi + ENplus*EHoldtime;
+
+##   ##Get E( (N-)R | all data )
+##   ENminusHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     remhold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],trans.prob=arg[4],
+##                           lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   ENminusEHoldtime.sumi <- sum(ENminusi*EHoldtimei)
+##   ##ENminus, EHoldtime already computed
+##   NminusHoldtime <- ENminusHoldtime.sumi - ENminusEHoldtime.sumi + ENminus*EHoldtime;
+
+##   ##NminusSq<-HoldtimeSq<- NplusNminus<- NplusHoldtime<- NminusHoldtime<-
+##   ##         ENplus<- ENminus<- EHoldtime <- NULL;
+  
+##   res <- c(NplusSq,NminusSq,HoldtimeSq, NplusNminus, NplusHoldtime, NminusHoldtime,
+##            ENplus, ENminus, EHoldtime);
+##   names(res) <- c("NplusSq","NminusSq","HoldtimeSq",
+##                   "NplusNminus", "NplusHoldtime", "NminusHoldtime",
+##                   "Nplus", "Nminus", "Holdtime")
+##   return(res);
+## }
+
 
 ##tested all.cond.mean and all.cond.mean2
 all.cond.mean.PO <- function(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
@@ -355,55 +622,52 @@ all.cond.mean.PO <- function(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,prec.to
 all.cond.mean2.PO <- function(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
   theArg <- CTMCPO2indepIntervals(data); ##accepts either ctmcpo1 or ctmcpomany
   ##Get E(N+^2 | all data)
+
   ENplusSq.sumi <- sum(apply(theArg, 1, function(arg){
     add.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
                         delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
   }))
-  sqENplus.sumi <- sum(apply(theArg, 1, function(arg){
-    add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
-                      delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)^2
-  }))
-  ENplus <- sum(apply(theArg, 1, function(arg){
+  
+  ENplusi <- apply(theArg, 1, function(arg){
     add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
-  }))
+  })
+  sqENplus.sumi <- sum(ENplusi^2)
+  ENplus <- sum(ENplusi)
   NplusSq <- ENplusSq.sumi-sqENplus.sumi + ENplus^2; #final answer.
-
+  ## print(ENplusSq.sumi)  
+  ## print(ENplusi)
+  ## print(sqENplus.sumi)
+  ## print(ENplus)
+  
   ##Get E(N-^2 | all data)  
   ENminusSq.sumi <- sum(apply(theArg, 1, function(arg){
     rem.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
   }))
-  sqENminus.sumi <- sum(apply(theArg, 1, function(arg){
-    rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
-                      delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)^2
-  }))
-  ENminus <- sum(apply(theArg, 1, function(arg){
+  ENminusi <- apply(theArg, 1, function(arg){
     rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
-  }))
+  })
+  sqENminus.sumi <- sum(ENminusi^2)
+  ENminus <- sum(ENminusi)
   NminusSq <- ENminusSq.sumi-sqENminus.sumi + ENminus^2; #final answer.
 
   ##Get E(R^2 | all data)  
   EHoldtimeSq.sumi <- sum(apply(theArg, 1, function(arg){
     hold.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
   }))
-  sqEHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
-    hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)^2
-  }))
-  EHoldtime <- sum(apply(theArg, 1, function(arg){
+  EHoldtimei <- apply(theArg, 1, function(arg){
     hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
-  }))
+  });
+  sqEHoldtime.sumi <- sum(EHoldtimei^2)
+  EHoldtime <- sum(EHoldtimei)
   HoldtimeSq <- EHoldtimeSq.sumi-sqEHoldtime.sumi + EHoldtime^2; #final answer.
   
   ##Get E( (N+)(N-) | all data )
   ENplusNminus.sumi <- sum(apply(theArg, 1, function(arg){
     addrem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
   }))
-  ENplusENminus.sumi <- sum(apply(theArg, 1, function(arg){
-    add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop) *
-      rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
-      
-  }))
+  ENplusENminus.sumi <- sum(ENplusi*ENminusi)
   ##ENplus,ENminus already computed
   NplusNminus <- ENplusNminus.sumi - ENplusENminus.sumi + ENplus*ENminus;
 
@@ -411,11 +675,7 @@ all.cond.mean2.PO <- function(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,prec.t
   ENplusHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
     addhold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
   }))
-  ENplusEHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
-    add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop) *
-      hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
-      
-  }))
+  ENplusEHoldtime.sumi <- sum(ENplusi*EHoldtimei)
   ##ENplus Eholdtime already computed
   NplusHoldtime <- ENplusHoldtime.sumi - ENplusEHoldtime.sumi + ENplus*EHoldtime;
 
@@ -423,60 +683,109 @@ all.cond.mean2.PO <- function(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,prec.t
   ENminusHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
     remhold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
   }))
-  ENminusEHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
-    rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop) *
-      hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
-      
-  }))
+  ENminusEHoldtime.sumi <- sum(ENminusi*EHoldtimei)
   ##ENminus, EHoldtime already computed
   NminusHoldtime <- ENminusHoldtime.sumi - ENminusEHoldtime.sumi + ENminus*EHoldtime;
+
+  ##NminusSq<-HoldtimeSq<- NplusNminus<- NplusHoldtime<- NminusHoldtime<-
+  ##         ENplus<- ENminus<- EHoldtime <- NULL;
   
-  res <- c(NplusSq,NminusSq,HoldtimeSq, NplusNminus, NplusHoldtime, NminusHoldtime);
+  res <- c(NplusSq,NminusSq,HoldtimeSq, NplusNminus, NplusHoldtime, NminusHoldtime,
+           ENplus, ENminus, EHoldtime);
   names(res) <- c("NplusSq","NminusSq","HoldtimeSq",
-                  "NplusNminus", "NplusHoldtime", "NminusHoldtime")
+                  "NplusNminus", "NplusHoldtime", "NminusHoldtime",
+                  "Nplus", "Nminus", "Holdtime")
   return(res);
 }
 
 
+##backup -- the current version _has_ been tested on a handful of values against this backup version.
 
-rem.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4,
-  prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean = rem.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
-    delta=delta,n=n,r=r)
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="timeave.cond.mean.one");
-##   if(joint.mean < 10^-13){
-##     ##stop("rem.cond.mean.one: joint mean too small.");
-##     ##return(NA)
+## ## # '2' = second-order means, ie meansquares and crossproducts
+## all.cond.mean2.PO.backup <- function(data,lambda,mu,nu=0,delta=0.001,n=1024, r=4,prec.tol=1e-12, prec.fail.stop=TRUE){
+##   theArg <- CTMCPO2indepIntervals(data); ##accepts either ctmcpo1 or ctmcpomany
+##   ##Get E(N+^2 | all data)
+##   ENplusSq.sumi <- sum(apply(theArg, 1, function(arg){
+##     add.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##                         delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   sqENplus.sumi <- sum(apply(theArg, 1, function(arg){
+##     add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)^2
+##   }))
+##   ENplus <- sum(apply(theArg, 1, function(arg){
+##     add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   NplusSq <- ENplusSq.sumi-sqENplus.sumi + ENplus^2; #final answer.
 
-##     print( paste("rem.cond.mean.one: joint mean too small for comfort."))
-##     print("joint.mean, trans.prob, and the ratio are ");
-##     print( c(joint.mean, trans.prob, joint.mean/trans.prob));
-##     return(joint.mean/trans.prob)
-##   }else{
-##     return(joint.mean/trans.prob)
-##   }
-}
+##   ##Get E(N-^2 | all data)  
+##   ENminusSq.sumi <- sum(apply(theArg, 1, function(arg){
+##     rem.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   sqENminus.sumi <- sum(apply(theArg, 1, function(arg){
+##     rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)^2
+##   }))
+##   ENminus <- sum(apply(theArg, 1, function(arg){
+##     rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,
+##                       delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   NminusSq <- ENminusSq.sumi-sqENminus.sumi + ENminus^2; #final answer.
 
+##   ##Get E(R^2 | all data)  
+##   EHoldtimeSq.sumi <- sum(apply(theArg, 1, function(arg){
+##     hold.cond.meanSq.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   sqEHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)^2
+##   }))
+##   EHoldtime <- sum(apply(theArg, 1, function(arg){
+##     hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   HoldtimeSq <- EHoldtimeSq.sumi-sqEHoldtime.sumi + EHoldtime^2; #final answer.
+  
+##   ##Get E( (N+)(N-) | all data )
+##   ENplusNminus.sumi <- sum(apply(theArg, 1, function(arg){
+##     addrem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   ENplusENminus.sumi <- sum(apply(theArg, 1, function(arg){
+##     add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop) *
+##       rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
+      
+##   }))
+##   ##ENplus,ENminus already computed
+##   NplusNminus <- ENplusNminus.sumi - ENplusENminus.sumi + ENplus*ENminus;
 
-timeave.cond.mean.one <- function(t,lambda,mu,nu=0,X0=1,Xt,delta=0.001,n=1024,r=4,
-                                  prec.tol=1e-12, prec.fail.stop=TRUE){
-  joint.mean = timeave.joint.mean.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,
-    delta=delta,n=n, r=r)
-  trans.prob = process.prob.one(t=t,lambda=lambda,mu=mu,nu=nu,X0=X0,Xt=Xt,n=n)
-  prec.error.handler(joint.mean,trans.prob,prec.tol,prec.fail.stop,
-                     fnid="timeave.cond.mean.one");
-  ##   if(joint.mean < prec.tol){
-  ##     stop("timeave.cond.mean.one: joint mean too small.");
-  ##     #return(NA)
-  ##   }else{
-  ##     return(joint.mean/trans.prob)
-  ##   }
-}
+##   ##Get E( (N+)R | all data )
+##   ENplusHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     addhold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   ENplusEHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     add.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop) *
+##       hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
+      
+##   }))
+##   ##ENplus Eholdtime already computed
+##   NplusHoldtime <- ENplusHoldtime.sumi - ENplusEHoldtime.sumi + ENplus*EHoldtime;
 
-hold.cond.mean.one <- timeave.cond.mean.one
-
+##   ##Get E( (N-)R | all data )
+##   ENminusHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     remhold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop)
+##   }))
+##   ENminusEHoldtime.sumi <- sum(apply(theArg, 1, function(arg){
+##     rem.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop) *
+##       hold.cond.mean.one(t=arg[3],X0=arg[1],Xt=arg[2],lambda=lambda,mu=mu,nu=nu,delta=delta,n=n,r=r, prec.tol=prec.tol,prec.fail.stop=prec.fail.stop);
+      
+##   }))
+##   ##ENminus, EHoldtime already computed
+##   NminusHoldtime <- ENminusHoldtime.sumi - ENminusEHoldtime.sumi + ENminus*EHoldtime;
+  
+##   res <- c(NplusSq,NminusSq,HoldtimeSq, NplusNminus, NplusHoldtime, NminusHoldtime);
+##   names(res) <- c("NplusSq","NminusSq","HoldtimeSq",
+##                   "NplusNminus", "NplusHoldtime", "NminusHoldtime")
+##   return(res);
+## }
 
 
 
