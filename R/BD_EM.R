@@ -93,64 +93,6 @@ EM.BD.SC <- function(dat, initParamMat, tol=1e-4,M=30, beta.immig,
 
 
 
-
-
-
-#################################begin utility func "BDsummaryStats"
-
-
-##Gets summary statistics for a single birth death markov chain passed in
-##in format $states $times $T
-
-if (!isGeneric("BDsummaryStats")) {
-  fun <- function(sim) standardGeneric("BDsummaryStats")
-  setGeneric("BDsummaryStats", fun)
-}
-setMethod("BDsummaryStats", "BDMC_many",
-          definition=
-          function(sim){
-            res <- sapply(sim@CTMCs, BDsummaryStats) ##can i specify ".BDMC" version?
-            apply(res,1, sum)            
-          })
-
-##### this gives a warning, "no definition for BDMC" upon package installation.
-#####   so it's not defining the classes first, for some reason.  why would that be.
-setMethod("BDsummaryStats", "BDMC",
-          definition=
-          function(sim){
-            waits <- waitTimes(sim@states, sim@times, sim@T)
-            jumps <- NijBD(sim@states);
-            maxState <- length(jumps[1,])-1;
-            Holdtime <- seq(0,maxState,1) %*% waits;
-            Nplus <- sum(jumps[2,]);
-            Nminus <-sum(jumps[1,]);
-            results <- c(Nplus, Nminus, Holdtime);
-            names(results) <- c("Nplus", "Nminus", "Holdtime");
-            results;
-          })
-
-setMethod("BDsummaryStats", "list",
-          definition=
-          function(sim){
-                                        #      endstateCount <- endstateCount+1;
-            waits <- waitTimes(sim$states, sim$times, sim$T)
-            jumps <- NijBD(sim$states);
-            maxState <- length(jumps[1,])-1;
-                                        #  maxState <- max(sim$states);
-            Holdtime <- seq(0,maxState,1) %*% waits;
-            Nplus <- sum(jumps[2,]);
-            Nminus <-sum(jumps[1,]);
-            results <- c(Nplus, Nminus, Holdtime);
-            names(results) <- c("Nplus", "Nminus", "Holdtime");
-            results;
-          })
-
-
-
-#################################end utility func "BDsummaryStats"
-
-
-
                                         #this is specific case of "Nij" function below rewritten for B-D proc
                                         #just output a 2xmaxval matrix since jumps are only up or down by 1.
                                         # returns a vector, jumpCounts.  jumpCounts[,] is jumps DOWNby1, [2,] is jumps UP.
