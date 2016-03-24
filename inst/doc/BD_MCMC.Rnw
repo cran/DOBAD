@@ -1,0 +1,286 @@
+\documentclass[12pt]{article}
+%\documentclass[article,12pt]{amsart}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The % is the comment character.
+% If you use emacs as a text editor, then the command
+% M-x global-font-lock-mode 
+% will turn on command highlighting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here are packages for fonts, symbols, and graphics
+
+%\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{versions}
+\usepackage{amsmath}
+\usepackage{appendix}
+
+\usepackage{color} %
+\usepackage{times} %
+\usepackage{amsthm} %
+\usepackage{amsfonts} %
+\usepackage[small]{caption} %
+\usepackage{natbib} %
+\usepackage[letterpaper]{geometry} %
+%\usepackage{hyperref} %
+
+
+\usepackage{colortbl}
+\definecolor{myGrey}{rgb}{.7,.75,.75}
+
+\bibpunct{(}{)}{;}{a}{}{,} %
+\setlength{\leftmargini}{4.8mm} %
+\setlength{\leftmargini}{4.8mm} %
+\setlength{\leftmarginii}{4.8mm} %
+\geometry{hmargin={1.34in,1.14in}, vmargin={1.02in,.99in}}
+
+\SweaveOpts{eps=TRUE} %% Somewhere did this get turned off? This should be default, but is not...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here are useful environments. Use them by typing, e.g.
+%  \begin{thm} Statement of theorem \end{thm}
+% Often followed at some point by \begin{proof} Proof \end{proof}
+
+% \newtheorem{thm}{Theorem}[section]
+% \newtheorem{lem}[thm]{\textbf Lemma}
+% \newtheorem{cor}[thm]{Corollary}
+% \newtheorem{prop}[thm]{\textbf Proposition}
+% \newtheorem{crit}[thm]{Criterium}
+% \newtheorem{alg}[thm]{Algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a different environment. Use it the same way and see what it looks
+% like
+
+%\theoremstyle{definition}
+
+% \newtheorem{defn}[thm]{Definition}
+% \newtheorem{conj}[thm]{Conjecture}
+% \newtheorem{exmp}[thm]{\textbf{Examples}}
+% \newtheorem{exe}[thm]{\textbf{Example}}
+% \newtheorem{prob}[thm]{Problem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a different environment. Use it the same way and see what it looks
+% like
+
+% \theoremstyle{remark}
+
+% \newtheorem{rem}[thm]{\textbf{Remark}}
+% \newtheorem{note}[thm]{Note}
+% \newtheorem{claim}[thm]{Claim}  \renewcommand{\theclaim}{}
+% \newtheorem{summ}{Summary}      \renewcommand{\thesumm}{}
+% \newtheorem{case}{Case}
+% \newtheorem{ack}{ACKNOWLEDGEMENTS}        \renewcommand{\theack}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some macros for frequently used commands
+
+\def\R{\mathbb{R}}
+\def\to{\rightarrow}
+\def\der#1#2{\frac{\partial #1}{\partial #2}}  %% This is a partial derivative
+\def\ip#1#2{\left<#1,#2\right>}  %% This is an inner product
+\def\inv#1{\frac{1}{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting stuff
+
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\textwidth}{167mm} \addtolength{\hoffset}{-22mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% No box at the end of proofs
+
+%\renewcommand{\qedsymbol}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Now for the actual document
+
+%%%
+%%%%%%%%%%%%%%macros for this particular document
+%%%
+
+\def\Z{\mathbb{Z}}
+
+
+%I am so confused.  \alpha_1, \sigma_1, \phi_1 are broken but _2 work. what?
+\def\la{\lambda}
+\def\ka{\kappa}
+\def\elrt#1#2{ e^{- \la (#1 -#2)rt} }
+
+%\includeversion{self}
+\excludeversion{self}
+
+% DO NOT DELETE the following line.  It is used by R package documentation.
+% \VignetteIndexEntry{ MCMC on Restricted Immigration Model }
+% DO NOT DELETE the above line
+\title{DOBAD Package: 
+  Gibbs Sampling MCMC of Linear Birth-Death Chain with Partial Data}
+
+\author{Charles Doss}
+\date{September 2009}
+
+\begin{document}
+
+
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+
+\vspace{-3.7mm} %
+
+<<preamble,echo=FALSE>>=
+options(continue="+");
+##options(warn=2); #warnings become errors
+@ 
+
+
+
+
+
+\part{Estimating Rates for Linear Birth-Death chain via Gibbs Sampler MCMC by
+  Exact Conditional Simulation}
+
+We are demonstrating the use of the
+\begin{verb}
+DOBAD
+\end{verb}
+package's capability to do Bayesian estimation of the rate parameters for a
+linear Birth-Death chain, given partial observations, using the methods of
+\citet{DSHKM2010EM}.  Call the chain $\{X(t)\}_{t \in \R}$, and its birth
+rate $la$ and its death rate $\mu$.  We fix $\beta \in \R$ and constrain
+$\nu$, the immigration rate, to be $\nu=\beta la$.  We will denote $\theta =
+(la, \mu)$.  The data is the value of the process at a finite number of
+discrete time points.  That is, for some fixed times $0=t_0, t_1, \ldots,
+t_n$, we see the state of the process, $X(t_i)$.  Thus the data, $D$, is $2$
+parts: a vector of the times $t_i$, $i= 0, \ldots, n$ and a vector of states
+at each of those times, $s_i$, for $i=0, \ldots, n$ (where $X(t_i) = s_i$.
+The gamma prior is the conjugate prior if we observed the chain continuously
+instead of partially.  The way we proceed, then, is to use independent Gamma
+priors on the $\lambda$ and $\mu$ and augment the state space for our MCMC to
+include the entire chain $\{X_t\}_{t \in [0,t_n]}$ by conditionally sampling
+$\{X_t\}_{t \in [0,t_n]};\theta | D$.
+
+First we generate the underlying process and the ``data'', set our
+prior parameters, and compute some summary statistics of the fully
+observed and partially observed processes.
+<<setParams>>=
+library(DOBAD)
+######## Generate the "data"
+initstate=7;
+set.seed(112);
+T=5;  L <- .2; mu <- .4;
+beta.immig <- .987;
+trueParams <- c(L,mu,beta.immig); names(trueParams) <- c("lambda", "mu","beta") #for saving results
+dr <- 0.0000000001; #Need |dr| < |L-mu| always o/w get sqrt(negative).
+n.fft <- 1024;
+delta <- 1;#play with. or make observation intervals distinct 
+dat <- birth.death.simulant(t=T, lambda=L, mu=mu, nu=L*beta.immig, X0=initstate);
+fullSummary <- BDsummaryStats(dat); fullSummary
+#fullSummary <- BDsummaryStats(dat[[1]]); fullSummary
+MLEs <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig); MLEs
+partialData <- getPartialData( seq(0,T,delta), dat);
+observedSummary <- BDsummaryStats.PO(partialData); observedSummary;
+
+##Bayesian parameters
+L.mean <- 1; M.mean <- 1.1;
+aL <- .02;
+bL <-  aL / L.mean
+aM <- .022;
+bM <- aM / M.mean;
+print(paste("Variances are", aL/bL^2, "and", aM/bM^2))
+
+N=10
+burn=0
+@ 
+
+Now we run the MCMC.  It is set to run only a few iterations, 
+obviously not enough for estimation, but enough to demonstrate the code.
+You may want to change the sweave code to run more iterations.
+
+<<runMCMC>>=
+
+##Rprof(file="mcmc.rprofout")
+timer <- system.time(theMCMC <- BD.MCMC.SC(Lguess=L.mean, Mguess=M.mean,
+                                           alpha.L=aL, beta.L=bL, # mean 
+                                           alpha.M=aM, beta.M=bM, #mean of 
+                                           beta.immig=beta.immig,
+                                           data= partialData,
+                                           burnIn=burn, N=N));
+##Rprof(NULL)
+#theMCMC
+mean(theMCMC[,1]); #lambda
+mean(theMCMC[,2]); #mu
+L;
+mu;
+
+timer;
+options(continue=" "); ##undo the setting we changed at top
+@ 
+
+<<lambdaPlotCode,fig=FALSE,include=FALSE>>=
+hist(theMCMC[,1], freq=FALSE, breaks=20,
+     xlab="Lambda", ylab = "Density",
+     main="Posterior of Lambda")
+Lmean <- mean(theMCMC[,1])
+abline(col="red", v=Lmean)
+abline(col="purple", v=L.mean)
+#text(col="red", y=-.3, x=Lmean, labels = "L")
+x <- seq(from=0,to=1, by=.01);
+y <- dgamma(x, shape=aL, rate=bL)
+lines(x,y, col="blue")
+@ 
+\begin{figure}
+  \begin{center}
+<<lambdaPlot,fig=TRUE, echo=FALSE>>=
+<<lambdaPlotCode>>
+@ 
+\end{center}
+\caption{Posterior Density Estimation of Lambda}
+\label{fig:lambdaPosterior}
+\end{figure}
+
+<<muPlotCode,fig=FALSE,include=FALSE>>=
+hist(theMCMC[,2], freq=FALSE, breaks=20,
+     xlab="Mu", ylab = "Density",
+     main="Posterior of Mu")
+Mmean <- mean(theMCMC[,2])
+abline(col="red", v=Mmean)
+abline(col="purple", v=M.mean)
+x <- seq(from=0,to=1, by=.01);
+y <- dgamma(x, shape=aM, rate=bM)
+lines(x,y, col="blue")
+@ 
+\begin{figure}
+  \begin{center}
+<<muPlot,fig=TRUE, echo=FALSE>>=
+<<muPlotCode>>
+@ 
+\end{center}
+\caption{Posterior Density Estimation of Mu}
+\label{fig:muPosterior}
+\end{figure}
+
+
+
+\bibliographystyle{biom} %
+\bibliography{DOBADbiblio}
+
+
+\end{document}
+
+
+
+
+
+
+
