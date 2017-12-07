@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The % is the comment character.
 % If you use emacs as a text editor, then the command
-% M-x global-font-lock-mode 
+% M-x global-font-lock-mode
 % will turn on command highlighting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -18,7 +18,7 @@
 \usepackage{graphicx}
 \usepackage{versions}
 \usepackage{amsmath}
-\usepackage{appendix}
+%% \usepackage{appendix}
 
 \usepackage{color} %
 \usepackage{times} %
@@ -121,7 +121,7 @@
 % DO NOT DELETE the following line.  It is used by R package documentation.
 % \VignetteIndexEntry{ MCMC on Restricted Immigration Model }
 % DO NOT DELETE the above line
-\title{DOBAD Package: 
+\title{DOBAD Package:
   Gibbs Sampling MCMC of Linear Birth-Death Chain with Partial Data}
 
 \author{Charles Doss}
@@ -141,7 +141,7 @@
 <<preamble,echo=FALSE>>=
 options(continue="+");
 ##options(warn=2); #warnings become errors
-@ 
+@
 
 
 
@@ -183,7 +183,7 @@ beta.immig <- .987;
 trueParams <- c(L,mu,beta.immig); names(trueParams) <- c("lambda", "mu","beta") #for saving results
 dr <- 0.0000000001; #Need |dr| < |L-mu| always o/w get sqrt(negative).
 n.fft <- 1024;
-delta <- 1;#play with. or make observation intervals distinct 
+delta <- 1;#play with. or make observation intervals distinct
 dat <- birth.death.simulant(t=T, lambda=L, mu=mu, nu=L*beta.immig, X0=initstate);
 fullSummary <- BDsummaryStats(dat); fullSummary
 #fullSummary <- BDsummaryStats(dat[[1]]); fullSummary
@@ -201,9 +201,9 @@ print(paste("Variances are", aL/bL^2, "and", aM/bM^2))
 
 N=10
 burn=0
-@ 
+@
 
-Now we run the MCMC.  It is set to run only a few iterations, 
+Now we run the MCMC.  It is set to run only a few iterations,
 obviously not enough for estimation, but enough to demonstrate the code.
 You may want to change the sweave code to run more iterations.
 
@@ -211,8 +211,8 @@ You may want to change the sweave code to run more iterations.
 
 ##Rprof(file="mcmc.rprofout")
 timer <- system.time(theMCMC <- BD.MCMC.SC(Lguess=L.mean, Mguess=M.mean,
-                                           alpha.L=aL, beta.L=bL, # mean 
-                                           alpha.M=aM, beta.M=bM, #mean of 
+                                           alpha.L=aL, beta.L=bL, # mean
+                                           alpha.M=aM, beta.M=bM, #mean of
                                            beta.immig=beta.immig,
                                            data= partialData,
                                            burnIn=burn, N=N));
@@ -225,7 +225,7 @@ mu;
 
 timer;
 options(continue=" "); ##undo the setting we changed at top
-@ 
+@
 
 <<lambdaPlotCode,fig=FALSE,include=FALSE>>=
 hist(theMCMC[,1], freq=FALSE, breaks=20,
@@ -238,12 +238,12 @@ abline(col="purple", v=L.mean)
 x <- seq(from=0,to=1, by=.01);
 y <- dgamma(x, shape=aL, rate=bL)
 lines(x,y, col="blue")
-@ 
+@
 \begin{figure}
   \begin{center}
 <<lambdaPlot,fig=TRUE, echo=FALSE>>=
 <<lambdaPlotCode>>
-@ 
+@
 \end{center}
 \caption{Posterior Density Estimation of Lambda}
 \label{fig:lambdaPosterior}
@@ -259,12 +259,12 @@ abline(col="purple", v=M.mean)
 x <- seq(from=0,to=1, by=.01);
 y <- dgamma(x, shape=aM, rate=bM)
 lines(x,y, col="blue")
-@ 
+@
 \begin{figure}
   \begin{center}
 <<muPlot,fig=TRUE, echo=FALSE>>=
 <<muPlotCode>>
-@ 
+@
 \end{center}
 \caption{Posterior Density Estimation of Mu}
 \label{fig:muPosterior}

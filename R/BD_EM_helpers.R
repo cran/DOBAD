@@ -5,7 +5,7 @@
                                         # must be within tol of their previous value.  tol=0 is valid.
                                         #Returns a matrix with the estimator value at each iteration.
                                         #The M+1st index is always the estimator, even if the tolerance stops sooner.
-EM.BD.SC.1 <- function(dat, init.params, tol=0.001, M=30, beta.immig, 
+EM.BD.SC.1 <- function(dat, init.params, tol=0.001, M=30, beta.immig,
                        dr=1e-07, n.fft=1024,r=4,
                        prec.tol=1e-12, prec.fail.stop=TRUE,
                        verbose=1, verbFile=NULL) {
@@ -22,7 +22,7 @@ EM.BD.SC.1 <- function(dat, init.params, tol=0.001, M=30, beta.immig,
     estimators.hist[i+1,] <- estimators;
     if (verbose>0){
       print( paste("Iteration", i, "just finished and the new estimators are"));
-      print(estimators);    
+      print(estimators);
     }
     estimators.hist[M+1,] <- estimators; #for ease of access if tolerance kicks in
     eps <- abs(estimators - estimators.hist[i,]);
@@ -50,46 +50,8 @@ E.step.SC.CTMC_PO_many <- function(theData, oldParams, beta.immig,  dr=0.001,
 }
 
 
-## This seems to be as fast as the version with 4 calls to mapply, tested for N = 100
-## E.step.SC.CTMC_PO_1<- function(theData, oldParams, beta.immig,  dr=0.001,
-##                                n.fft=1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
-##   vec <- c(0,0,0);
-##   L <- oldParams[1];
-##   mu <- oldParams[2];
-##   nu <- beta.immig*L;
-##   N <- length(getStates(theData));
-##   for (i in 1:(N-1)){
-##     timeDiff <- getTimes(theData)[i+1] - getTimes(theData)[i];
-##     ##nfftSums <- max(n.fft, getStates(theData)[i+1]+1); #This is quite inefficient.  should code a 1-getter
-##     vec[1] <- vec[1]+
-##       add.cond.mean.one(lambda=L, mu=mu,
-##                         nu=nu, X0=getStates(theData)[i],
-##                         t=timeDiff, delta=dr,
-##                         Xt=getStates(theData)[i+1], n=n.fft,r=r,
-##                         prec.tol=prec.tol, prec.fail.stop=prec.fail.stop);
-##     vec[2] <- vec[2] +
-##       rem.cond.mean.one(lambda=L, mu=mu,
-##                         nu=nu, X0=getStates(theData)[i],
-##                         t=timeDiff, delta=dr,
-##                         Xt=getStates(theData)[i+1], n=n.fft,
-##                         r=r,prec.tol=prec.tol, prec.fail.stop=prec.fail.stop);
-##     vec[3] <- vec[3] +
-##       timeave.cond.mean.one(lambda=L, mu=mu,
-##                             nu=nu, X0=getStates(theData)[i],
-##                             t=timeDiff, delta=dr,
-##                             Xt=getStates(theData)[i+1], n=n.fft,r=r,
-##                             prec.tol=prec.tol, prec.fail.stop=prec.fail.stop);
-##   }
-##   names(  vec) <- c("Nplus","Nminus", "Holdtime");
-##   vec;
-## }
 
 
-## using mapply is not really faster than the for-loop in the old version,
-## commented out Have tested that this is identical to old version (with
-## for-loop) on a handful of different parameter values, but not
-## extraordinarily extensive.  (probably is an all-or-nothign situation
-## though)
 E.step.SC.CTMC_PO_1<- function(theData, oldParams, beta.immig,  dr=0.001,
                                       n.fft=1024, r=4, prec.tol=1e-12, prec.fail.stop=TRUE){
   vec <- c(0,0,0);
@@ -180,35 +142,6 @@ getNewParams.SC.list <- function(theData, oldParams, beta.immig,  dr=0.001, n.ff
 getNewParams.SC.default <- getNewParams.SC.list
 
 E.step.SC.default <- E.step.SC.list;
-
-## #### This is no faster than with the for loop.  i thought 'for' was slow, but...
-## E.step.SC.new2 <- function(oldParams, modelParams, theData, dr=0.001, n.fft=1024){
-##   vec <- c(0,0,0);
-##   if ( !identical(names(oldParams), c("lambdahat", "muhat")) ){
-##     print("Didn't name parameters correctly.");
-##     print( names(oldParams) );
-##   }
-##   L <- oldParams["lambdahat"];
-##   mu <- oldParams["muhat"];
-##   N <- length(theData$states);
-##   timeDiffs <- theData$times[2:N]-theData$times[1:(N-1)];
-##   tmp <- apply(matrix(1:(N-1)),1,function(idx){
-##     c(add.cond.mean.one(lambda=L, mu=mu,
-##                       nu=modelParams["n"]*L, X0=theData$states[idx],
-##                       t=timeDiffs[idx], delta=dr,
-##                       Xt=theData$states[idx+1], n=n.fft),
-##      rem.cond.mean.one(lambda=L, mu=mu,
-##                       nu=modelParams["n"]*L, X0=theData$states[idx],
-##                       t=timeDiffs[idx], delta=dr,
-##                       Xt=theData$states[idx+1], n=n.fft),
-##     timeave.cond.mean.one(lambda=L, mu=mu,
-##                           nu=modelParams["n"]*L, X0=theData$states[idx],
-##                           t=timeDiffs[idx], delta=dr,
-##                           Xt=theData$states[idx+1], n=n.fft));});
-##   vec <- apply(tmp, 1,sum)
-##   names(vec) <- c("Nplus","Nminus", "Holdtime");
-##   vec;
-## }
 
 
 

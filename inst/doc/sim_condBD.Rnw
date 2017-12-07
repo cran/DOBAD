@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The % is the comment character.
 % If you use emacs as a text editor, then the command
-% M-x global-font-lock-mode 
+% M-x global-font-lock-mode
 % will turn on command highlighting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -18,7 +18,7 @@
 \usepackage{graphicx}
 \usepackage{versions}
 \usepackage{amsmath}
-\usepackage{appendix}
+%% \usepackage{appendix}
 
 \usepackage{color} %
 \usepackage{times} %
@@ -139,7 +139,7 @@
 
 <<preamble,echo=FALSE>>=
 options(continue="+");
-@ 
+@
 
 
 
@@ -164,32 +164,32 @@ s_i$.
 
 <<sourceCode>>=
 library(DOBAD)
-@ 
+@
 
 Generate a chain, the ``truth'' that we would not observe in practice:
 <<>>=
-L <- .3; m <- .5; 
+L <- .3; m <- .5;
 nu <- .4
 set.seed(112)
 unobservedChain <- birth.death.simulant(t=5, X0=11, lambda=.3, mu=.5, nu=.4);
 unobservedChain;
-@ 
+@
 Then fix some ``observation times'' and ``observe'' the chain:
 <<>>=
 times <- c(0, .21,.62,.73, 1.44, 1.95, 3.56, 4.17);
 obsData <- getPartialData(times,  unobservedChain);
 obsData;
-@ 
+@
 Now, we do a conditional simulation:
 <<condSim>>=
 nsims <- 2;
 condSims <- sim.condBD(N=nsims, bd.PO=obsData, L=L, m=m, nu=nu);
 condSims[1]
 condSims[2]
-@ 
+@
 <<conclusion, echo=FALSE>>=
 options(continue=" "); ##undo what we set at top
-@ 
+@
 
 \bibliographystyle{biom} %
 \bibliography{DOBADbiblio}

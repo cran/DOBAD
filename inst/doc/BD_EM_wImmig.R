@@ -30,10 +30,10 @@ names(trueParams) <- c("lambda", "mu")
 
 ##Get the "data"
 dat <- birth.death.simulant(t=T, lambda=L, m=mu, nu=L*beta.immig, X0=initstate);
-fullSummary <- BDsummaryStats(dat); 
+fullSummary <- BDsummaryStats(dat);
 fullSummary
 names(fullSummary) <- c("Nplus", "Nminus", "Holdtime");
-MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig); 
+MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig);
 #MLEs
 ###MLE.FullyObserved are NOT the MLE for the EM, but hopefully close as delta --> 0
 
@@ -60,7 +60,7 @@ param0 <- c(.8,.9,1.1); names(param0) <- c("lambdahat", "muhat", "nuhat");
 ##   BDloglikelihood.PO(partialDat=partialData, L=exp(rates[1]), m=exp(rates[2]),
 ##                      nu=exp(rates[3]), n.fft=1024);
 ## }
-## genericEstimates <- optim(param0, logLike, 
+## genericEstimates <- optim(param0, logLike,
 ##                           ##method="L-BFGS-B",
 ##                           ##lower=c(0.0001, 0.0001, .0001), upper=c(100,100,100),
 ##                           control=list(fnscale=-1))
@@ -75,7 +75,7 @@ tol <- .0000005;
 ##myInitParamMat <- rbind(c(0, 1.46,.65),
 ##                        c(.43, .4, 1.3));
 myInitParamMat <- rbind(c(.25,.26,.15));
-emOuts <- DOBAD:::EM.BD(dat=partialData, init.params.mat=myInitParamMat, tol=tol, M=iters, 
+emOuts <- DOBAD:::EM.BD(dat=partialData, init.params.mat=myInitParamMat, tol=tol, M=iters,
                         dr=1e-07, n.fft=1024,
                         alpha=.2, beta=.3, fracSimIncr=3, numMCs.i.start=20,
                         outputBestHist=FALSE)

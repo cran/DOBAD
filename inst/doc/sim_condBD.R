@@ -15,7 +15,7 @@ library(DOBAD)
 ###################################################
 ### code chunk number 3: sim_condBD.Rnw:170-175
 ###################################################
-L <- .3; m <- .5; 
+L <- .3; m <- .5;
 nu <- .4
 set.seed(112)
 unobservedChain <- birth.death.simulant(t=5, X0=11, lambda=.3, mu=.5, nu=.4);

@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The % is the comment character.
 % If you use emacs as a text editor, then the command
-% M-x global-font-lock-mode 
+% M-x global-font-lock-mode
 % will turn on command highlighting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -18,7 +18,7 @@
 \usepackage{graphicx}
 \usepackage{versions}
 \usepackage{amsmath}
-\usepackage{appendix}
+%% \usepackage{appendix}
 
 \usepackage{color} %
 \usepackage{times} %
@@ -121,7 +121,7 @@
 % DO NOT DELETE the following line.  It is used by R package documentation.
 % \VignetteIndexEntry{ EM on Full BDI Model }
 % DO NOT DELETE the above line
-\title{DOBAD Package: 
+\title{DOBAD Package:
 EM Algorithm on a Partially Observed Linear Birth-Death-Immigration Process}
 
 \author{Charles Doss}
@@ -136,12 +136,12 @@ EM Algorithm on a Partially Observed Linear Birth-Death-Immigration Process}
 \end{titlepage}
 
 
-\vspace{-3.7mm} 
+\vspace{-3.7mm}
 
 <<preamble,echo=FALSE>>=
 options(continue="+");
 ##options(warn=2); # warnings become errors
-@ 
+@
 
 
 
@@ -198,17 +198,17 @@ n.fft <- 1024;
 trueParams <- c(L,mu);
 names(trueParams) <- c("lambda", "mu")
 
-@ 
+@
 Now we get the ``truth'' and then observe the ``data''
 as well as calculate some information about both.
 <<>>=
 
 ##Get the "data"
 dat <- birth.death.simulant(t=T, lambda=L, m=mu, nu=L*beta.immig, X0=initstate);
-fullSummary <- BDsummaryStats(dat); 
+fullSummary <- BDsummaryStats(dat);
 fullSummary
 names(fullSummary) <- c("Nplus", "Nminus", "Holdtime");
-MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig); 
+MLEs.FullyObserved <- M.step.SC( EMsuffStats=fullSummary, T=T, beta.immig= beta.immig);
 #MLEs
 ###MLE.FullyObserved are NOT the MLE for the EM, but hopefully close as delta --> 0
 
@@ -223,7 +223,7 @@ observedSummary <- BDsummaryStats.PO(partialData); observedSummary;
 param0 <- c(.8,.9,1.1); names(param0) <- c("lambdahat", "muhat", "nuhat");
 #param0
 
-@ 
+@
 
 
 Note that the difference between \verb@fullSummary@ and
@@ -247,7 +247,7 @@ choice was made due to its slowness at this time.
 % partialData2 <- new("CTMC_PO_1", states=c(4,2,19),
 %                    times=c(0,9.432,20.21));
 % partialData <- new("CTMC_PO_many", BDMCsPO=c(partialData,partialData2));
-% param0 <- c(.8,.9,1.1); 
+% param0 <- c(.8,.9,1.1);
 % names(param0) <- c("lambdahat", "muhat", "nuhat");
 
 % @
@@ -260,7 +260,7 @@ choice was made due to its slowness at this time.
 ##   BDloglikelihood.PO(partialDat=partialData, L=exp(rates[1]), m=exp(rates[2]),
 ##                      nu=exp(rates[3]), n.fft=1024);
 ## }
-## genericEstimates <- optim(param0, logLike, 
+## genericEstimates <- optim(param0, logLike,
 ##                           ##method="L-BFGS-B",
 ##                           ##lower=c(0.0001, 0.0001, .0001), upper=c(100,100,100),
 ##                           control=list(fnscale=-1))
@@ -275,7 +275,7 @@ tol <- .0000005;
 ##myInitParamMat <- rbind(c(0, 1.46,.65),
 ##                        c(.43, .4, 1.3));
 myInitParamMat <- rbind(c(.25,.26,.15));
-emOuts <- DOBAD:::EM.BD(dat=partialData, init.params.mat=myInitParamMat, tol=tol, M=iters, 
+emOuts <- DOBAD:::EM.BD(dat=partialData, init.params.mat=myInitParamMat, tol=tol, M=iters,
                         dr=1e-07, n.fft=1024,
                         alpha=.2, beta=.3, fracSimIncr=3, numMCs.i.start=20,
                         outputBestHist=FALSE)
@@ -291,7 +291,7 @@ print(bestparams)
 @
 <<conclusion,echo=FALSE>>=
 options(continue=" ");
-@ 
+@
 
 \bibliographystyle{biom} %
 \bibliography{DOBADbiblio}

@@ -19,7 +19,7 @@ beta.immig <- .987;
 trueParams <- c(L,mu,beta.immig); names(trueParams) <- c("lambda", "mu","beta") #for saving results
 dr <- 0.0000000001; #Need |dr| < |L-mu| always o/w get sqrt(negative).
 n.fft <- 1024;
-delta <- 1;#play with. or make observation intervals distinct 
+delta <- 1;#play with. or make observation intervals distinct
 dat <- birth.death.simulant(t=T, lambda=L, mu=mu, nu=L*beta.immig, X0=initstate);
 fullSummary <- BDsummaryStats(dat); fullSummary
 #fullSummary <- BDsummaryStats(dat[[1]]); fullSummary
@@ -45,8 +45,8 @@ burn=0
 
 ##Rprof(file="mcmc.rprofout")
 timer <- system.time(theMCMC <- BD.MCMC.SC(Lguess=L.mean, Mguess=M.mean,
-                                           alpha.L=aL, beta.L=bL, # mean 
-                                           alpha.M=aM, beta.M=bM, #mean of 
+                                           alpha.L=aL, beta.L=bL, # mean
+                                           alpha.M=aM, beta.M=bM, #mean of
                                            beta.immig=beta.immig,
                                            data= partialData,
                                            burnIn=burn, N=N));

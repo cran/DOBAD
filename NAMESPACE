@@ -4,7 +4,10 @@ importFrom(lattice, trellis.device)
 import(methods)
 importFrom("grDevices", "dev.off", "pdf", "postscript")
 importFrom("stats", "fft", "integrate", "nlm", "qnorm", "rbinom",
-           "rexp", "rgamma", "rmultinom", "runif", "sd", "var")
+           "rexp", "rgamma", "rmultinom", "runif", "sd", "var",
+           "model.matrix", "optim")
+importFrom("utils", "tail")
+importFrom("Matrix", "bdiag")
 
 exportClasses(CTMC, BDMC, CTMC_PO_1, CTMC_PO_many, BDMC_many)
 exportMethods(BDsummaryStats, BDsummaryStats.PO)
@@ -64,3 +67,4 @@ export(CTMC.simulate.piecewise, CTMC.simulate,
        getSubMC, getIthJumpTime,getIthJumpTimes, getIthState)
 export(genDoneSided,hessianOneSided)
 export(EM.BD.SC)
+export(EM.BD.SC.cov.1sv)
